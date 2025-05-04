@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xdll32", "xdll32\xdll32.csproj", "{CB36FA65-C3E9-4AF7-B00F-E232A5C85F2F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "共享", "共享\共享.shproj", "{45FC8B45-8FC2-4A65-A54C-BC0997F67321}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC0BAEE2-F0A6-4DB2-B46B-D43D50EF6308}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "@Vortex_decryptor", "@Vortex_decryptor\@Vortex_decryptor.csproj", "{E0FE65FE-5A43-4BAD-A3B2-F83A6FD3CE68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rundl132", "Rundl132\Rundl132.csproj", "{A410017E-4B55-4D6B-8456-303AEB5CC479}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VortexCry", "VortexCrypt\VortexCry.csproj", "{AC4CD1D8-0C90-442C-9DDD-68A9AB5617A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VortexDecrypt", "VortexDecrypt\VortexDecrypt.csproj", "{D80E63F5-9562-4A50-8644-FE4D9A4F5F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSA密钥对生成器", "RSA密钥对生成器\RSA密钥对生成器.csproj", "{9B7237E8-36DF-49BD-89C8-A28E303917FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB36FA65-C3E9-4AF7-B00F-E232A5C85F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB36FA65-C3E9-4AF7-B00F-E232A5C85F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB36FA65-C3E9-4AF7-B00F-E232A5C85F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB36FA65-C3E9-4AF7-B00F-E232A5C85F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0FE65FE-5A43-4BAD-A3B2-F83A6FD3CE68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0FE65FE-5A43-4BAD-A3B2-F83A6FD3CE68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0FE65FE-5A43-4BAD-A3B2-F83A6FD3CE68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0FE65FE-5A43-4BAD-A3B2-F83A6FD3CE68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A410017E-4B55-4D6B-8456-303AEB5CC479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A410017E-4B55-4D6B-8456-303AEB5CC479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A410017E-4B55-4D6B-8456-303AEB5CC479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A410017E-4B55-4D6B-8456-303AEB5CC479}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC4CD1D8-0C90-442C-9DDD-68A9AB5617A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC4CD1D8-0C90-442C-9DDD-68A9AB5617A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC4CD1D8-0C90-442C-9DDD-68A9AB5617A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC4CD1D8-0C90-442C-9DDD-68A9AB5617A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80E63F5-9562-4A50-8644-FE4D9A4F5F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80E63F5-9562-4A50-8644-FE4D9A4F5F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80E63F5-9562-4A50-8644-FE4D9A4F5F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80E63F5-9562-4A50-8644-FE4D9A4F5F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A316229D-0960-44EF-BBB0-B9DC45E5452F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		共享\共享.projitems*{45fc8b45-8fc2-4a65-a54c-bc0997f67321}*SharedItemsImports = 13
+		共享\共享.projitems*{ac4cd1d8-0c90-442c-9ddd-68a9ab5617a3}*SharedItemsImports = 4
+		共享\共享.projitems*{cb36fa65-c3e9-4af7-b00f-e232a5c85f2f}*SharedItemsImports = 4
+		共享\共享.projitems*{e0fe65fe-5a43-4bad-a3b2-f83a6fd3ce68}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# CS4014: 由于此调用不会等待，因此在调用完成前将继续执行当前方法
+dotnet_diagnostic.CS4014.severity = none
+
+# IDE0058: 永远不会使用表达式值
+dotnet_diagnostic.IDE0058.severity = none
+
+# CS1998: 异步方法缺少 "await" 运算符，将以同步方式运行
+dotnet_diagnostic.CS1998.severity = none
