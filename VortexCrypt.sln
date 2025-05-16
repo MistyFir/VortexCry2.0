@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VortexDecrypt", "VortexDecr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSA密钥对生成器", "RSA密钥对生成器\RSA密钥对生成器.csproj", "{9B7237E8-36DF-49BD-89C8-A28E303917FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vcryx", "vcryx\vcryx.csproj", "{028C95E9-BD03-4AB1-A20A-6E55E289EB0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B7237E8-36DF-49BD-89C8-A28E303917FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028C95E9-BD03-4AB1-A20A-6E55E289EB0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028C95E9-BD03-4AB1-A20A-6E55E289EB0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028C95E9-BD03-4AB1-A20A-6E55E289EB0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028C95E9-BD03-4AB1-A20A-6E55E289EB0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		SolutionGuid = {A316229D-0960-44EF-BBB0-B9DC45E5452F}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		共享\共享.projitems*{028c95e9-bd03-4ab1-a20a-6e55e289eb0e}*SharedItemsImports = 4
 		共享\共享.projitems*{45fc8b45-8fc2-4a65-a54c-bc0997f67321}*SharedItemsImports = 13
 		共享\共享.projitems*{ac4cd1d8-0c90-442c-9ddd-68a9ab5617a3}*SharedItemsImports = 4
 		共享\共享.projitems*{cb36fa65-c3e9-4af7-b00f-e232a5c85f2f}*SharedItemsImports = 4
